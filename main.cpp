@@ -20,7 +20,7 @@ int main()
 
     cout << "**************************************" << endl;
     cout << "49 X 49 Gauss Elim.." << endl;
-    cout << "**************************************" << endl;
+    cout << "**************************************" << endl;   
     Matrix ans1 = m2.GaussElimination(m3);
     ans1.displayMatrix();
     
