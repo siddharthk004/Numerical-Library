@@ -22,9 +22,6 @@ int main()
 
 
 
-
-
-
     cout << "225 X 225 Matrix:" << endl;
     m4.inputFileMatrix("Input/225left.txt");
     m5.inputFileMatrix("Input/225right.txt");
