@@ -29,9 +29,10 @@ int main()
 
     cout << "\n\nRoot_finding function called Fixed Point" << endl;
     for(double i = -10;i < 10;i++)
+    {
         double Ans3 =  R3.Fixed_Point(i);
-    cout << "The root of the equation is: " << Ans3 << endl;
-
+        cout << "The root of the equation is: " << Ans3 << endl;
+    }
     // cmplx ans;
     // cmplx obj1(3.0,2.0);
     // obj1.display();
