@@ -21,16 +21,16 @@ public:
     // Polynomial P(x) = AX^3 - BX
     float functionPoly(float x)
     {
-        return ((A * (x * x * x)) - (B * x)); // 4x3 - 3x
+        return ((A * (x * x * x)) - (B * x)); // 4X^3 - 3X
     }
 
     float DfunctionPoly(float x)
     {
-        return (((3*A) * (x * x)) - (B));  // 12x2-3
+        return (((3*A) * (x * x)) - (B));  // 12X^2-3
     }
 
-    double function_g(double x)
+    double function_g(double X)
     {
-        return sqrt(x+1);
+        return ((X*X)+5)/5;   // X^2 + 5  / 5
     }
 };

@@ -102,10 +102,8 @@ double Root_Finding::Fixed_Point(double a)
         {
             return func_g;
         }
-
-        a = func_g;
         Itr++;
-        cout << "cnt = " << Itr << endl;
+        a = func_g;
     }
     return a;
 }
