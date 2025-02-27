@@ -1,59 +1,43 @@
-// #include "Matrix.hpp"
-#include "./Root-Finding/Root_Finding.hpp"
-// #include "./Complex/cmplx.hpp"
+#include "Matrix.hpp"
 
 int main()
 {
-    // cout << "Matrix Library" << endl;
-    // int r = 0,c = 0;
-    // cout << "Enter the number of rows: ";
-    // cin >> r;
-    // cout << "Enter the number of columns: ";
-    // cin >> c;
-    // Matrix m1(r, c);
-    // m1.inputMatrix(m1);
-    // m1.displayMatrix(m1);
-    // m1.GaussElimination(m1);
-    // m1.displayMatrix(m1);
+    // Read the first matrix from file
+    Matrix m1;
+    m1.inputFileMatrix("input1.txt");
+    m1.displayMatrix();
 
-    Root_Finding R1, R2, R3;
+    // Read the second matrix from file
+    Matrix m2;
+    m2.inputFileMatrix("input2.txt");
+    m2.displayMatrix();
 
-    cout << "\n\nRoot_finding function called Bisection" << endl;
-    double Ans1 = R1.Bisection(0.0, 1.0);
-    cout << "The root of the equation is: " << Ans1 << endl;
+    // Addition
+    cout << "Addition Result:" << endl;
+    Matrix sumMatrix = m1.AddMatrix(m2);
+    sumMatrix.displayMatrix();
 
-    cout << "\n\nRoot_finding function called Newton Raphson" << endl;
-    double Ans2 = R2.Newton_Raphson(1.0);
-    cout << "The root of the equation is: " << Ans2 << endl;
+    // Subtraction
+    cout << "Subtraction Result:" << endl;
+    Matrix subMatrix = m1.SubMatrix(m2);
+    subMatrix.displayMatrix();
 
-    cout << "\n\nRoot_finding function called Fixed Point" << endl;
+    // Check if the matrices are diagonal
+    cout << "Checking if matrices are diagonal:" << endl;
 
-    double Ans3 = R3.Fixed_Point(1.0);
-    cout << "The root of the equation is: " << Ans3 << endl;
+    cout << "Matrix 1: " << (m1.isDiagonal() ? "Diagonal" : "Not Diagonal") << endl;
+    cout << "Matrix 2: " << (m2.isDiagonal() ? "Diagonal" : "Not Diagonal") << endl;
 
-    // cmplx ans;
-    // cmplx obj1(3.0,2.0);
-    // obj1.display();
+    // Check if the matrices are Identity
+    cout << "Checking if matrices is Identity:" << endl;
 
-    // cmplx obj2(1.0,4.0);
-    // obj2.display();
+    cout << "Matrix 1: " << (m1.isIdentity() ? "Identity" : "Not Identity") << endl;
+    cout << "Matrix 2: " << (m2.isIdentity() ? "Identity" : "Not Identity") << endl;
 
-    // ans = obj1.add(obj2);
-    // ans.display();
-
-    // ans = obj1.sub(obj2);
-    // ans.display();
-
-    // ans = obj1.mult(obj2);
-    // ans.display();
-
-    // ans = obj1.div(obj2);
-    // ans.display();
-
-    // double ansD = obj1.norm();
-    // std::cout << "Norm of obj1: " << ansD << std::endl;
-
-    // obj1.complexConjugate();
+    // gausss Elimination
+    cout << "Gaussian Elimination Result:" << endl;
+    Matrix gaussMatrix = m1.GaussElimination();
+    gaussMatrix.displayMatrix();
 
     return 0;
 }

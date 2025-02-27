@@ -7,14 +7,20 @@ Root_Finding::Root_Finding()
     Itr = 0;
 }
 
+Root_Finding::Root_Finding(double TOL,double Itr)
+{
+    this->TOL = TOL;
+    this->Itr = Itr;
+}
+
 double Root_Finding::Bisection(double a, double b)
 {
     polynomial p1;
 
     while (fabs(a - b) > TOL)
     {
-        double func_a = p1.functionPoly(a);
-        double func_b = p1.functionPoly(b);
+        double func_a = p1.functionPolyB(a);
+        double func_b = p1.functionPolyB(b);
 
         if (func_a * func_b > 0)
         {
@@ -23,7 +29,7 @@ double Root_Finding::Bisection(double a, double b)
         }
 
         double ans_a = (a + b) / 2;
-        double func_ans_a = p1.functionPoly(ans_a);
+        double func_ans_a = p1.functionPolyB(ans_a);
 
         if (fabs(func_ans_a) < TOL)
         {
@@ -56,8 +62,8 @@ double Root_Finding::Newton_Raphson(double a)
     polynomial p1;
     while (true)
     {
-        double func = p1.functionPoly(a);
-        double func_d = p1.DfunctionPoly(a);
+        double func = p1.functionPolyB(a);
+        double func_d = p1.functionDoublePolyB(a);
 
         // Prevent division by zero
         if (fabs(func_d) < TOL)
@@ -93,7 +99,7 @@ double Root_Finding::Newton_Raphson(double a)
 double Root_Finding::Fixed_Point(double a)
 {
     polynomial p1;
-    while (Itr <= 500)
+    while (Itr <= 50)
     {
         double func_g = p1.function_g(a);
 
