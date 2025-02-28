@@ -15,6 +15,8 @@ public:
     void inputFileMatrix(const std::string File);
     Matrix AddMatrix(const Matrix &mat);
     Matrix GaussElimination();
+    Matrix UpperTriangular();
+    Matrix LowerTriangular();
     Matrix SubMatrix(const Matrix &mat);
     bool isDiagonal();
     bool isIdentity();

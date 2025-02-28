@@ -39,5 +39,15 @@ int main()
     Matrix gaussMatrix = m1.GaussElimination();
     gaussMatrix.displayMatrix();
 
+    // Lower Triangular
+    cout << "Lower Triangular Matrix Result:" << endl;
+    Matrix lowerTriangular = m1.LowerTriangular();
+    lowerTriangular.displayMatrix();
+    
+    // Upper Triangular
+    cout << "Upper Triangular Matrix Result:" << endl;
+    Matrix upperTriangular = m1.UpperTriangular();
+    upperTriangular.displayMatrix();
+
     return 0;
 }
