@@ -22,6 +22,11 @@ int main()
     Matrix subMatrix = m1.SubMatrix(m2);
     subMatrix.displayMatrix();
 
+    // Multiplication
+    cout << "Multiplication Result:" << endl;
+    Matrix mulMatrix = m1.MultMatrix(m2);
+    mulMatrix.displayMatrix();
+
     // Check if the matrices are diagonal
     cout << "Checking if matrices are diagonal:" << endl;
 

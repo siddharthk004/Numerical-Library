@@ -120,6 +120,23 @@ Matrix Matrix::AddMatrix(const Matrix &mat)
     return result;
 }
 
+Matrix Matrix::MultMatrix(const Matrix &mat)
+{
+    if (rows != mat.rows || cols != mat.cols)
+    {
+        cerr << "Error: Matrices must have the same dimensions for subtraction!" << endl;
+        return Matrix(); // Return empty matrix
+    }
+
+    Matrix result(rows, cols);
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            for (int k = 0; k < cols; k++)
+                result.data[i][j] = this->data[j][k] * mat.data[k][j];
+
+    return result;
+}
+
 Matrix Matrix::SubMatrix(const Matrix &mat)
 {
     if (rows != mat.rows || cols != mat.cols)

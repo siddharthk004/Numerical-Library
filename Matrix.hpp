@@ -12,12 +12,17 @@ public:
     Matrix(int r, int c);
     Matrix(const Matrix &mat);
     ~Matrix();
+
     void inputFileMatrix(const std::string File);
+    
     Matrix AddMatrix(const Matrix &mat);
+    Matrix MultMatrix(const Matrix &mat);
+    Matrix SubMatrix(const Matrix &mat);
+    
     Matrix GaussElimination();
     Matrix UpperTriangular();
     Matrix LowerTriangular();
-    Matrix SubMatrix(const Matrix &mat);
+    
     bool isDiagonal();
     bool isIdentity();
     void displayMatrix();
