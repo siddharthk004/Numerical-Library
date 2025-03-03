@@ -34,6 +34,7 @@ int main()
     cout << "Matrix 2: " << (m2.isDiagonal() ? "Diagonal" : "Not Diagonal") << endl;
 
     // Check if the matrices are Identity
+    
     cout << "Checking if matrices is Identity:" << endl;
 
     cout << "Matrix 1: " << (m1.isIdentity() ? "Identity" : "Not Identity") << endl;
