@@ -20,8 +20,6 @@ public:
     Matrix SubMatrix(const Matrix &mat);
     
     Matrix GaussElimination();
-    Matrix UpperTriangular();
-    Matrix LowerTriangular();
     
     bool isDiagonal();
     bool isIdentity();

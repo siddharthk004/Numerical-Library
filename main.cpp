@@ -34,7 +34,7 @@ int main()
     cout << "Matrix 2: " << (m2.isDiagonal() ? "Diagonal" : "Not Diagonal") << endl;
 
     // Check if the matrices are Identity
-    
+
     cout << "Checking if matrices is Identity:" << endl;
 
     cout << "Matrix 1: " << (m1.isIdentity() ? "Identity" : "Not Identity") << endl;
@@ -45,15 +45,7 @@ int main()
     Matrix gaussMatrix = m1.GaussElimination();
     gaussMatrix.displayMatrix();
 
-    // Lower Triangular
-    cout << "Lower Triangular Matrix Result:" << endl;
-    Matrix lowerTriangular = m1.LowerTriangular();
-    lowerTriangular.displayMatrix();
-    
-    // Upper Triangular
-    cout << "Upper Triangular Matrix Result:" << endl;
-    Matrix upperTriangular = m1.UpperTriangular();
-    upperTriangular.displayMatrix();
+    // 
 
     return 0;
 }

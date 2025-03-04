@@ -196,7 +196,6 @@ Matrix Matrix::GaussElimination()
 
     for (int i = 0; i < n; i++)
     {
-        // Pivot row selection
         int maxIndex = i;
         for (int k = i + 1; k < n; k++)
         {
@@ -206,173 +205,45 @@ Matrix Matrix::GaussElimination()
             }
         }
 
-        // Swap rows if necessary
         if (maxIndex != i)
         {
-            if (i < 0 || i >= rows || maxIndex < 0 || maxIndex >= rows)
+            if (i < 0 || i >= obj1.rows || maxIndex < 0 || maxIndex >= obj1.rows)
             {
-                throw out_of_range("Row indices out of range");
+                throw std::out_of_range("Row indices out of range");
             }
-            if (i != maxIndex)
-            {
-                for (int k = 0; k < cols; k++)
-                {
-                    swap(data[i][k], data[maxIndex][k]);
-                }
-            }
+            swap(obj1.data[i], obj1.data[maxIndex]);
         }
 
-        // Ensure pivot is nonzero
         if (fabs(obj1.data[i][i]) < 1e-9)
         {
-            cerr << "Error: Singular matrix detected!" << endl;
+            std::cerr << "Error: Singular matrix detected!" << std::endl;
             return Matrix(0, 0);
         }
 
         for (int k = i + 1; k < n; k++)
         {
             double factor = obj1.data[k][i] / obj1.data[i][i];
-            for (int j = i; j < n; j++)
+            for (int j = i; j < obj1.cols; j++)
             {
                 obj1.data[k][j] -= factor * obj1.data[i][j];
             }
         }
     }
-    for (int i = 0; i < n; i++)
+
+    // Back-substitution
+    Matrix result(n, 1);
+    for (int i = n - 1; i >= 0; i--)
     {
-        for (int j = 0; j < n; j++)
+        result.data[i][0] = obj1.data[i][n] / obj1.data[i][i];
+        for (int j = i - 1; j >= 0; j--)
         {
-            if(i == j)
-            {
-                obj1.data[i][j] /= obj1.data[i][j]; 
-            }
+            obj1.data[j][n] -= obj1.data[j][i] * result.data[i][0];
         }
     }
 
-    return obj1;
+    return result;
 }
 
-Matrix Matrix::LowerTriangular()
-{
-    Matrix A(*this);
-    int n = A.rows;
-
-    for (int i = 0; i < n; i++)
-    {
-        // Pivot row selection
-        int maxIndex = i;
-        for (int k = i + 1; k < n; k++)
-        {
-            if (fabs(A.data[k][i]) > fabs(A.data[maxIndex][i]))
-            {
-                maxIndex = k;
-            }
-        }
-
-        // Swap rows if necessary
-        if (maxIndex != i)
-        {
-            if (i < 0 || i >= rows || maxIndex < 0 || maxIndex >= rows)
-            {
-                throw out_of_range("Row indices out of range");
-            }
-            if (i != maxIndex)
-            {
-                for (int k = 0; k < cols; k++)
-                {
-                    swap(A.data[i][k], A.data[maxIndex][k]);
-                }
-            }
-        }
-
-        // Ensure pivot is nonzero
-        if (fabs(A.data[i][i]) < 1e-9)
-        {
-            cerr << "Error: Singular matrix detected!" << endl;
-            return Matrix(0, 0);
-        }
-
-        // Zero out elements above the diagonal
-        for (int k = 0; k < i; k++)
-        {
-            double factor = A.data[k][i] / A.data[i][i];
-            for (int j = i; j < n; j++)
-            {
-                A.data[k][j] -= factor * A.data[i][j];
-            }
-        }
-    }
-    return A;
-}
-
-Matrix Matrix::UpperTriangular()
-{
-    Matrix A(*this); // Create a copy of the matrix
-    int n = A.rows;
-
-    // Ensure the matrix is square
-    if (n != A.cols) {
-        throw invalid_argument("Matrix must be square");
-    }
-
-    for (int i = 0; i < n; i++)
-    {
-        // Pivot row selection
-        int maxIndex = i;
-        for (int k = i + 1; k < n; k++)
-        {
-            if (fabs(A.data[k][i]) > fabs(A.data[maxIndex][i]))
-            {
-                maxIndex = k;
-            }
-        }
-
-        // Swap rows if necessary
-        if (maxIndex != i)
-        {
-            if (i < 0 || i >= n || maxIndex < 0 || maxIndex >= n)
-            {
-                throw out_of_range("Row indices out of range");
-            }
-            for (int k = 0; k < n; k++)
-            {
-                swap(A.data[i][k], A.data[maxIndex][k]);
-            }
-        }
-
-        // Ensure pivot is nonzero
-        if (fabs(A.data[i][i]) < 1e-9)
-        {
-            cerr << "Warning: Pivot element is close to zero. Results may be inaccurate." << endl;
-            // Continue instead of returning an empty matrix
-        }
-
-        // Perform Gaussian elimination
-        for (int k = i + 1; k < n; k++)
-        {
-            double factor = A.data[k][i] / A.data[i][i];
-            for (int j = i; j < n; j++)
-            {
-                A.data[k][j] -= factor * A.data[i][j];
-            }
-        }
-    }
-
-    // Round small values to zero
-    double threshold = 1e-10; // Adjust this threshold as needed
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            if (fabs(A.data[i][j]) < threshold)
-            {
-                A.data[i][j] = 0.0;
-            }
-        }
-    }
-
-    return A;
-}
 
 void Matrix::displayMatrix()
 {
