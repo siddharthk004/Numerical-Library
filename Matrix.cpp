@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Matrix.hpp"
 #include <math.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -122,17 +123,25 @@ Matrix Matrix::AddMatrix(const Matrix &mat)
 
 Matrix Matrix::MultMatrix(const Matrix &mat)
 {
-    if (rows != mat.rows || cols != mat.cols)
+    if (cols != mat.rows)
     {
-        cerr << "Error: Matrices must have the same dimensions for subtraction!" << endl;
-        return Matrix(); // Return empty matrix
+        cerr << "Error: Matrices cannot be multiplied, incompatible dimensions!" << endl;
+        return Matrix(); // Return an empty matrix
     }
 
-    Matrix result(rows, cols);
+    Matrix result(rows, mat.cols); // Create result matrix of size (rows x mat.cols)
+
     for (int i = 0; i < rows; i++)
-        for (int j = 0; j < cols; j++)
-            for (int k = 0; k < cols; k++)
-                result.data[i][j] = this->data[j][k] * mat.data[k][j];
+    {
+        for (int j = 0; j < mat.cols; j++)
+        {
+            result.data[i][j] = 0; // Initialize result cell
+            for (int k = 0; k < cols; k++) // Multiply row elements by column elements
+            {
+                result.data[i][j] += this->data[i][k] * mat.data[k][j];
+            }
+        }
+    }
 
     return result;
 }
@@ -244,6 +253,122 @@ Matrix Matrix::GaussElimination()
     return result;
 }
 
+Matrix Matrix::InverseMatrix()
+{
+    if (rows != cols)
+    {
+        cerr << "Error: Matrix must be square for inversion!" << endl;
+        return Matrix(); // Return empty matrix
+    }
+
+    int n = rows;
+    Matrix augmented(n, 2 * n);
+
+    // Create Augmented Matrix [A | I]
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+            augmented.data[i][j] = this->data[i][j]; // Copy original matrix
+
+        for (int j = 0; j < n; j++)
+            augmented.data[i][j + n] = (i == j) ? 1 : 0; // Identity matrix
+    }
+
+    // Apply Gaussian Elimination
+    for (int i = 0; i < n; i++)
+    {
+        // Find the maximum pivot
+        int pivotRow = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (fabs(augmented.data[j][i]) > fabs(augmented.data[pivotRow][i]))
+                pivotRow = j;
+        }
+
+        // Swap rows if needed
+        if (i != pivotRow)
+            swap(augmented.data[i], augmented.data[pivotRow]);
+
+        // Check if matrix is singular
+        if (fabs(augmented.data[i][i]) < 1e-9)
+        {
+            cerr << "Error: Matrix is singular and cannot be inverted!" << endl;
+            return Matrix();
+        }
+
+        // Normalize the pivot row
+        double pivot = augmented.data[i][i];
+        for (int j = 0; j < 2 * n; j++)
+            augmented.data[i][j] /= pivot;
+
+        // Eliminate the column
+        for (int j = 0; j < n; j++)
+        {
+            if (i != j)
+            {
+                double factor = augmented.data[j][i];
+                for (int k = 0; k < 2 * n; k++)
+                    augmented.data[j][k] -= factor * augmented.data[i][k];
+            }
+        }
+    }
+
+    // Extract inverse matrix from the right side
+    Matrix inverse(n, n);
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            inverse.data[i][j] = augmented.data[i][j + n];
+
+    return inverse;
+}
+
+double Matrix::DeterminantMatrix()
+{
+    if (rows != cols)
+    {
+        cerr << "Error: Determinant can only be computed for square matrices!" << endl;
+        return 0.0;
+    }
+
+    int n = rows;
+    Matrix temp(*this);
+    double det = 1.0;
+
+    for (int i = 0; i < n; i++)
+    {
+        int maxIndex = i;
+        for (int k = i + 1; k < n; k++)
+        {
+            if (fabs(temp.data[k][i]) > fabs(temp.data[maxIndex][i]))
+            {
+                maxIndex = k;
+            }
+        }
+
+        if (fabs(temp.data[maxIndex][i]) < 1e-9)
+            return 0.0;
+
+        // Swap rows if needed
+        if (maxIndex != i)
+        {
+            swap(temp.data[i], temp.data[maxIndex]);
+            det *= -1;
+        }
+
+        det *= temp.data[i][i];
+
+        for (int k = i + 1; k < n; k++)
+        {
+            double factor = temp.data[k][i] / temp.data[i][i];
+            for (int j = i; j < n; j++)
+            {
+                temp.data[k][j] -= factor * temp.data[i][j];
+            }
+        }
+    }
+
+    return det;
+}
 
 void Matrix::displayMatrix()
 {
@@ -255,3 +380,4 @@ void Matrix::displayMatrix()
         cout << endl;
     }
 }
+

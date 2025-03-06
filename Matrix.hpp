@@ -1,4 +1,3 @@
-
 #include <iostream>
 using namespace std;
 
@@ -18,8 +17,11 @@ public:
     Matrix AddMatrix(const Matrix &mat);
     Matrix MultMatrix(const Matrix &mat);
     Matrix SubMatrix(const Matrix &mat);
+    double DeterminantMatrix();
+    Matrix InverseMatrix();
     
     Matrix GaussElimination();
+
     
     bool isDiagonal();
     bool isIdentity();
