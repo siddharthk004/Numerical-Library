@@ -203,17 +203,15 @@ Matrix Matrix::GaussElimination()
     Matrix obj1(*this);
     int n = obj1.rows;
 
-    if (obj1.cols != n + 1)  // Ensure it's an augmented matrix (n equations, n+1 columns)
+    if (obj1.cols != n + 1) 
     {
         throw std::invalid_argument("Matrix must be augmented (n x (n+1))");
     }
 
-    // Forward elimination (Convert to upper triangular form)
     for (int i = 0; i < n; i++)
     {
         int maxIndex = i;
 
-        // Partial Pivoting: Find the row with the maximum absolute value in column i
         for (int k = i + 1; k < n; k++)
         {
             if (fabs(obj1.data[k][i]) > fabs(obj1.data[maxIndex][i]))
@@ -228,7 +226,6 @@ Matrix Matrix::GaussElimination()
             std::swap(obj1.data[i], obj1.data[maxIndex]);
         }
 
-        // Check for singular matrix
         if (fabs(obj1.data[i][i]) < 1e-9)
         {
             throw std::runtime_error("Singular matrix detected! No unique solution.");
@@ -239,9 +236,8 @@ Matrix Matrix::GaussElimination()
         {
             obj1.data[i][j] /= obj1.data[i][i];
         }
-        obj1.data[i][i] = 1;  // Set leading coefficient to 1
+        obj1.data[i][i] = 1; 
 
-        // Eliminate column values below the pivot
         for (int k = i + 1; k < n; k++)
         {
             double factor = obj1.data[k][i];
@@ -258,7 +254,7 @@ Matrix Matrix::GaussElimination()
 
     for (int i = n - 1; i >= 0; i--)
     {
-        result.data[i][0] = obj1.data[i][n];  // Start with augmented column
+        result.data[i][0] = obj1.data[i][n];  
 
         for (int j = i + 1; j < n; j++)
         {

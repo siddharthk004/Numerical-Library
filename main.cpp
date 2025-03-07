@@ -3,69 +3,71 @@
 int main()
 {
     cout << "**************************************" << endl;
+    cout << "Read From File And Print It" << endl;
+    cout << "**************************************" << endl;
 
     // Read the first matrix from file
     Matrix m1;
     m1.inputFileMatrix("input1.txt");
     m1.displayMatrix();
-    cout << "**************************************" << endl;
 
     // Read the second matrix from file
     Matrix m2;
     m2.inputFileMatrix("input2.txt");
     m2.displayMatrix();
-    cout << "**************************************" << endl;
 
     // Read the first matrix from file
     Matrix m3;
     m3.inputFileMatrix("input3.txt");
     m3.displayMatrix();
-    cout << "**************************************" << endl;
  
     // Read the second matrix from file
     Matrix m4;
     m4.inputFileMatrix("input4.txt");
     m4.displayMatrix();
-    cout << "**************************************" << endl;
+
     // Read the second matrix from file
     Matrix m5;
     m5.inputFileMatrix("input1X.txt");
     m5.displayMatrix();
-    cout << "**************************************" << endl;
+
     // Read the second matrix from file
     Matrix m6;
     m6.inputFileMatrix("input3X.txt");
     m6.displayMatrix();
+
+    cout << "**************************************" << endl;
+    cout << "Add-Sub-Mult Operations" << endl;
     cout << "**************************************" << endl;
 
-    // // Addition
-    // cout << "Addition Result:" << endl;
-    // Matrix sumMatrix = m1.AddMatrix(m2);
-    // sumMatrix.displayMatrix();
-    // cout << "**************************************" << endl;
+    // Addition
+    cout << "Addition Result:" << endl;
+    Matrix sumMatrix = m1.AddMatrix(m3);
+    sumMatrix.displayMatrix();
 
-    // // Subtraction
-    // cout << "Subtraction Result:" << endl;
-    // Matrix subMatrix = m1.SubMatrix(m2);
-    // subMatrix.displayMatrix();
-    // cout << "**************************************" << endl;
+    // Subtraction
+    cout << "Subtraction Result:" << endl;
+    Matrix subMatrix = m1.SubMatrix(m3);
+    subMatrix.displayMatrix();
 
-    // // Multiplication
-    // cout << "Multiplication Result:" << endl;
-    // Matrix mulMatrix = m1.MultMatrix(m2);
-    // mulMatrix.displayMatrix();
-    // cout << "**************************************" << endl;
+    // Multiplication
+    cout << "Multiplication Result:" << endl;
+    Matrix mulMatrix = m1.MultMatrix(m2);
+    mulMatrix.displayMatrix();
 
-    // // Check if the matrices are diagonal
-    // cout << "Checking if matrices are diagonal:" << endl;
-    // cout << "Matrix 1: " << (m1.isDiagonal() ? "Diagonal" : "Not Diagonal") << endl;
-    // // cout << "Matrix 2: " << (m2.isDiagonal() ? "Diagonal" : "Not Diagonal") << endl;
-    // cout << "**************************************" << endl;
+    cout << "**************************************" << endl;
+    cout << "Diagonal And Identity" << endl;
+    cout << "**************************************" << endl;
 
-    // // Check if the matrices are Identity
-    // cout << "Checking if matrices is Identity:" << endl;
-    // cout << "Matrix 1: " << (m1.isIdentity() ? "Identity" : "Not Identity") << endl;
-    // // cout << "Matrix 2: " << (m2.isIdentity() ? "Identity" : "Not Identity") << endl;
+    // Check if the matrices are diagonal
+    cout << "Checking if matrices are diagonal:" << endl;
+    cout << "Matrix 1: " << (m1.isDiagonal() ? "Diagonal" : "Not Diagonal") << endl;
+    cout << "Matrix 2: " << (m2.isDiagonal() ? "Diagonal" : "Not Diagonal") << endl;
+
+    // Check if the matrices are Identity
+    cout << "Checking if matrices is Identity:" << endl;
+    cout << "Matrix 1: " << (m1.isIdentity() ? "Identity" : "Not Identity") << endl;
+    cout << "Matrix 2: " << (m2.isIdentity() ? "Identity" : "Not Identity") << endl;
     
     cout << "**************************************" << endl;
     cout << "A and A~ Upper Triangular " << endl;
