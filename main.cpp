@@ -27,6 +27,16 @@ int main()
     m4.inputFileMatrix("input4.txt");
     m4.displayMatrix();
     cout << "**************************************" << endl;
+    // Read the second matrix from file
+    Matrix m5;
+    m5.inputFileMatrix("input1X.txt");
+    m5.displayMatrix();
+    cout << "**************************************" << endl;
+    // Read the second matrix from file
+    Matrix m6;
+    m6.inputFileMatrix("input3X.txt");
+    m6.displayMatrix();
+    cout << "**************************************" << endl;
 
     // // Addition
     // cout << "Addition Result:" << endl;
@@ -56,12 +66,21 @@ int main()
     // cout << "Checking if matrices is Identity:" << endl;
     // cout << "Matrix 1: " << (m1.isIdentity() ? "Identity" : "Not Identity") << endl;
     // // cout << "Matrix 2: " << (m2.isIdentity() ? "Identity" : "Not Identity") << endl;
-    // cout << "**************************************" << endl;
+    
+    cout << "**************************************" << endl;
+    cout << "A and A~ Upper Triangular " << endl;
+    cout << "**************************************" << endl;
 
-    // // gausss Elimination
-    // cout << "Gaussian Elimination Result:" << endl;
-    // Matrix gaussMatrix = m1.GaussElimination();
-    // gaussMatrix.displayMatrix();
+    // gausss Elimination
+    cout << "Gaussian Elimination Result:" << endl;
+    Matrix gaussMatrix = m5.GaussElimination();
+    gaussMatrix.displayMatrix();
+    
+    // gausss Elimination
+    cout << "Gaussian Elimination Result:" << endl;
+    Matrix gaussMatrix3 = m6.GaussElimination();
+    gaussMatrix3.displayMatrix();
+    
     cout << "**************************************" << endl;
     cout << "Ax = b" << endl;
     cout << "**************************************" << endl;
@@ -70,24 +89,21 @@ int main()
     cout << "Inverse Matrix Result:" << endl;
     Matrix inverseMatrix = m1.InverseMatrix();
     inverseMatrix.displayMatrix();
-    cout << "**************************************" << endl;
 
     // determinant of matrix
     cout << "Determinant of Matrix 1: " << m1.DeterminantMatrix() << endl;
     cout << "Determinant of Matrix 2: " << m3.DeterminantMatrix() << endl;
-    cout << "**************************************" << endl;
-
 
     // Multiplication
     cout << "Multiplication Result: A-1 * b" << endl;
     Matrix mulMatrix1 = inverseMatrix.MultMatrix(m2);
     mulMatrix1.displayMatrix();
-    cout << "**************************************" << endl;
 
     // Multiplication
     cout << "Multiplication Result:" << endl;
     Matrix mulMatrix2 = m1.MultMatrix(mulMatrix1);
     mulMatrix2.displayMatrix();
+
     cout << "**************************************" << endl;
     cout << "A~x = b" << endl;
     cout << "**************************************" << endl;
@@ -96,18 +112,17 @@ int main()
     cout << "Inverse Matrix Result:" << endl;
     Matrix inverseMatrix3 = m3.InverseMatrix();
     inverseMatrix3.displayMatrix();
-    cout << "**************************************" << endl;
 
     // Multiplication
     cout << "Multiplication Result:" << endl;
     Matrix mulMatrix3 = inverseMatrix3.MultMatrix(m2);
     mulMatrix3.displayMatrix();
-    cout << "**************************************" << endl;
 
     // Multiplication
     cout << "Multiplication Result:" << endl;
     Matrix mulMatrix4 = m3.MultMatrix(mulMatrix3);
     mulMatrix4.displayMatrix();
+
     cout << "**************************************" << endl;
     cout << "Ax = b~" << endl;
     cout << "**************************************" << endl;
@@ -116,15 +131,16 @@ int main()
     cout << "Multiplication Result:" << endl;
     Matrix mulMatrix5 = inverseMatrix.MultMatrix(m4);
     mulMatrix5.displayMatrix();
-    cout << "**************************************" << endl;
 
     // Multiplication
     cout << "Multiplication Result:" << endl;
     Matrix mulMatrix6 = m3.MultMatrix(mulMatrix5);
     mulMatrix6.displayMatrix();
+
+    cout << "**************************************" << endl;
+    cout << "End" << endl;
     cout << "**************************************" << endl;
 
-    // 
     return 0;
 }
 

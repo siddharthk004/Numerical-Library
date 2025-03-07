@@ -21,7 +21,6 @@ public:
     Matrix InverseMatrix();
     
     Matrix GaussElimination();
-
     
     bool isDiagonal();
     bool isIdentity();

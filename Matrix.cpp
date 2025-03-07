@@ -203,9 +203,17 @@ Matrix Matrix::GaussElimination()
     Matrix obj1(*this);
     int n = obj1.rows;
 
+    if (obj1.cols != n + 1)  // Ensure it's an augmented matrix (n equations, n+1 columns)
+    {
+        throw std::invalid_argument("Matrix must be augmented (n x (n+1))");
+    }
+
+    // Forward elimination (Convert to upper triangular form)
     for (int i = 0; i < n; i++)
     {
         int maxIndex = i;
+
+        // Partial Pivoting: Find the row with the maximum absolute value in column i
         for (int k = i + 1; k < n; k++)
         {
             if (fabs(obj1.data[k][i]) > fabs(obj1.data[maxIndex][i]))
@@ -214,24 +222,30 @@ Matrix Matrix::GaussElimination()
             }
         }
 
+        // Swap rows if needed
         if (maxIndex != i)
         {
-            if (i < 0 || i >= obj1.rows || maxIndex < 0 || maxIndex >= obj1.rows)
-            {
-                throw std::out_of_range("Row indices out of range");
-            }
-            swap(obj1.data[i], obj1.data[maxIndex]);
+            std::swap(obj1.data[i], obj1.data[maxIndex]);
         }
 
+        // Check for singular matrix
         if (fabs(obj1.data[i][i]) < 1e-9)
         {
-            std::cerr << "Error: Singular matrix detected!" << std::endl;
-            return Matrix(0, 0);
+            throw std::runtime_error("Singular matrix detected! No unique solution.");
         }
 
+        // Normalize pivot row
+        for (int j = i + 1; j < obj1.cols; j++)
+        {
+            obj1.data[i][j] /= obj1.data[i][i];
+        }
+        obj1.data[i][i] = 1;  // Set leading coefficient to 1
+
+        // Eliminate column values below the pivot
         for (int k = i + 1; k < n; k++)
         {
-            double factor = obj1.data[k][i] / obj1.data[i][i];
+            double factor = obj1.data[k][i];
+
             for (int j = i; j < obj1.cols; j++)
             {
                 obj1.data[k][j] -= factor * obj1.data[i][j];
@@ -239,18 +253,20 @@ Matrix Matrix::GaussElimination()
         }
     }
 
-    // Back-substitution
-    Matrix result(n, 1);
+    // Back-substitution to find the solution
+    Matrix result(n, 1);  // Solution vector
+
     for (int i = n - 1; i >= 0; i--)
     {
-        result.data[i][0] = obj1.data[i][n] / obj1.data[i][i];
-        for (int j = i - 1; j >= 0; j--)
+        result.data[i][0] = obj1.data[i][n];  // Start with augmented column
+
+        for (int j = i + 1; j < n; j++)
         {
-            obj1.data[j][n] -= obj1.data[j][i] * result.data[i][0];
+            result.data[i][0] -= obj1.data[i][j] * result.data[j][0];
         }
     }
 
-    return result;
+    return result;  // Returns solution vector
 }
 
 Matrix Matrix::InverseMatrix()
