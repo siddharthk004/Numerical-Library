@@ -13,14 +13,7 @@ int main()
     m3.inputFileMatrix("Input/49r.txt");
 
     Matrix m4,m5;
-    // Read 225 X 225 Matrix
-
-
-
-
-
-
-    
+    // Read 225 X 225 Matri
     cout << "225 X 225 Matrix:" << endl;
     m4.inputFileMatrix("Input/225left.txt");
     m5.inputFileMatrix("Input/225right.txt");
