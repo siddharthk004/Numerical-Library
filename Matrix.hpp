@@ -1,11 +1,12 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class Matrix
 {
 public:
     int rows, cols;
-    double **data;
+    vector<vector<double>> data;
 
     Matrix();
     Matrix(int r, int c);
@@ -17,12 +18,21 @@ public:
     Matrix AddMatrix(const Matrix &mat);
     Matrix MultMatrix(const Matrix &mat);
     Matrix SubMatrix(const Matrix &mat);
-    double DeterminantMatrix();
-    Matrix InverseMatrix();
     
-    Matrix GaussElimination();
-    
+    Matrix GaussElimination(const Matrix &mat);
+    Matrix UpperMatrix();
+    Matrix LowerMatrix();
+
+    void GaussJacobi();
+    void GaussSeidal();
+
+    Matrix MakeDominant();
+    void IterativeMethod();
+    void IterativeMethodS();
     bool isDiagonal();
     bool isIdentity();
     void displayMatrix();
+    double DeterminantMatrix();
+    Matrix InverseMatrix();
+
 };

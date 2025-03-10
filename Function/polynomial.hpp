@@ -13,4 +13,7 @@ public:
     float functionDoublePolyA(float x);
     float functionDoublePolyB(float x);
     double function_g(double X);
+    double X(double y,double z);
+    double Y(double x,double z);
+    double Z(double x,double y);
 };

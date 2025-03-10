@@ -3,6 +3,7 @@
 #include "Matrix.hpp"
 #include <math.h>
 #include <iomanip>
+#include "Function/polynomial.hpp"
 
 using namespace std;
 
@@ -10,48 +11,16 @@ Matrix::Matrix()
 {
     rows = 0;
     cols = 0;
-    data = nullptr;
 }
 
-Matrix::Matrix(int r, int c)
-{
-    rows = r;
-    cols = c;
-    data = new double *[rows];
-    for (int i = 0; i < rows; ++i)
-    {
-        data[i] = new double[cols](); // Ensure values are initialized
-    }
-}
+Matrix::Matrix(int r, int c) : rows(r), cols(c), data(r, vector<double>(c, 0)) 
+{}
 
-Matrix::Matrix(const Matrix &mat)
-{
-    rows = mat.rows;
-    cols = mat.cols;
-    data = new double *[rows];
-
-    for (int i = 0; i < rows; ++i)
-    {
-        data[i] = new double[cols];
-        for (int j = 0; j < cols; ++j)
-        {
-            data[i][j] = mat.data[i][j];
-        }
-    }
-}
+Matrix::Matrix(const Matrix &mat) : rows(mat.rows), cols(mat.cols), data(mat.data) 
+{}
 
 Matrix::~Matrix()
 {
-    if (data)
-    {
-        for (int i = 0; i < rows; ++i)
-        {
-            if (data[i] != nullptr) // Check if row is allocated
-                delete[] data[i];
-        }
-        delete[] data;
-        data = nullptr; // Prevent dangling pointer
-    }
 }
 
 void Matrix::inputFileMatrix(const std::string File)
@@ -67,25 +36,12 @@ void Matrix::inputFileMatrix(const std::string File)
     int newRows, newCols;
     inputFile >> newRows >> newCols;
 
-    // Free old memory safely
-    if (data)
-    {
-        for (int i = 0; i < rows; ++i)
-            delete[] data[i];
-        delete[] data;
-        data = nullptr;
-    }
-
     // Update matrix dimensions
     rows = newRows;
     cols = newCols;
 
-    // Allocate memory with zero initialization
-    data = new double *[rows];
-    for (int i = 0; i < rows; ++i)
-    {
-        data[i] = new double[cols](); // Initialize all elements to 0
-    }
+    // Resize the vector with zero-initialization
+    data.resize(rows, vector<double>(cols, 0.0));
 
     // Read matrix values from the file
     for (int i = 0; i < rows; i++)
@@ -135,7 +91,7 @@ Matrix Matrix::MultMatrix(const Matrix &mat)
     {
         for (int j = 0; j < mat.cols; j++)
         {
-            result.data[i][j] = 0; // Initialize result cell
+            result.data[i][j] = 0;         // Initialize result cell
             for (int k = 0; k < cols; k++) // Multiply row elements by column elements
             {
                 result.data[i][j] += this->data[i][k] * mat.data[k][j];
@@ -198,15 +154,34 @@ bool Matrix::isIdentity()
     return true;
 }
 
-Matrix Matrix::GaussElimination()
+Matrix Matrix::GaussElimination(const Matrix &mat)
 {
-    Matrix obj1(*this);
-    int n = obj1.rows;
-
-    if (obj1.cols != n + 1) 
+    if (rows != mat.rows || mat.cols != 1)
     {
-        throw std::invalid_argument("Matrix must be augmented (n x (n+1))");
+        cerr << "Error: Augment matrix must have the same number of rows and exactly one column." << endl;
+        return *this;
     }
+    
+    // Augment the matrix
+    Matrix obj1(*this); // Copy current matrix
+    
+    obj1.cols += 1;     // Increase column count
+    
+    for (int i = 0; i < rows; i++)
+    {
+        // Check if row size is as expected before augmentation
+        if (obj1.data[i].size() == obj1.cols - 1)
+        {
+            obj1.data[i].push_back(mat.data[i][0]); // Append column
+        }
+        else
+        {
+            cerr << "Error: Row " << i << " has unexpected size! Expected " << obj1.cols - 1 << ", got " << obj1.data[i].size() << endl;
+            return *this;
+        }
+    }
+
+    int n = obj1.rows;
 
     for (int i = 0; i < n; i++)
     {
@@ -220,7 +195,6 @@ Matrix Matrix::GaussElimination()
             }
         }
 
-        // Swap rows if needed
         if (maxIndex != i)
         {
             std::swap(obj1.data[i], obj1.data[maxIndex]);
@@ -228,15 +202,15 @@ Matrix Matrix::GaussElimination()
 
         if (fabs(obj1.data[i][i]) < 1e-9)
         {
-            throw std::runtime_error("Singular matrix detected! No unique solution.");
+            obj1;
         }
 
-        // Normalize pivot row
         for (int j = i + 1; j < obj1.cols; j++)
         {
             obj1.data[i][j] /= obj1.data[i][i];
         }
-        obj1.data[i][i] = 1; 
+
+        obj1.data[i][i] = 1;
 
         for (int k = i + 1; k < n; k++)
         {
@@ -250,11 +224,11 @@ Matrix Matrix::GaussElimination()
     }
 
     // Back-substitution to find the solution
-    Matrix result(n, 1);  // Solution vector
+    Matrix result(n, 1);
 
     for (int i = n - 1; i >= 0; i--)
     {
-        result.data[i][0] = obj1.data[i][n];  
+        result.data[i][0] = obj1.data[i][n];
 
         for (int j = i + 1; j < n; j++)
         {
@@ -262,7 +236,193 @@ Matrix Matrix::GaussElimination()
         }
     }
 
-    return result;  // Returns solution vector
+    return result;
+}
+
+Matrix Matrix::UpperMatrix()
+{
+    Matrix U(*this); 
+    
+    int n = U.rows;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (fabs(U.data[i][i]) < 1e-9)
+        {
+            throw std::runtime_error("LU decomposition is not possible (zero pivot detected).");
+        }
+
+        for (int k = i + 1; k < n; k++)
+        {
+            double factor = U.data[k][i] / U.data[i][i]; 
+
+            for (int j = i; j < U.cols; j++)
+            {
+                U.data[k][j] -= factor * U.data[i][j];
+            }
+        }
+    }
+
+    return U;
+}
+
+Matrix Matrix::LowerMatrix()
+{
+    int n = rows;
+    Matrix L(n, n); 
+
+    for (int i = 0; i < n; i++)
+    {
+        L.data[i][i] = 1; 
+
+        for (int k = i + 1; k < n; k++)
+        {
+            if (fabs(data[i][i]) < 1e-9) 
+            {
+                throw std::runtime_error("LU decomposition is not possible (zero pivot detected).");
+            }
+
+            L.data[k][i] = data[k][i] / data[i][i]; // Store elimination factor
+        }
+    }
+    return L; 
+}
+
+Matrix Matrix::MakeDominant()
+{
+    Matrix dominantMatrix(*this);
+    int n = rows;
+    
+    std::vector<bool> used(n, false); // Track used rows
+    Matrix newMat(n, cols);
+    
+    for (int i = 0; i < n; i++)
+    {
+        int bestRow = -1;
+
+        for (int j = 0; j < n; j++)
+        {
+            if (!used[j])
+            {
+                double diag = fabs(data[j][i]);
+                double rowSum = 0.0;
+
+                for (int k = 0; k < n; k++)
+                {
+                    if (k != i)
+                    {
+                        rowSum += fabs(data[j][k]);
+                    }
+                }
+
+                if (diag >= rowSum)
+                {
+                    bestRow = j;
+                    break;
+                }
+            }
+        }
+
+        if (bestRow == -1)
+        {
+            throw std::runtime_error("Cannot rearrange matrix into a diagonally dominant form.");
+        }
+
+        newMat.data[i] = data[bestRow]; // Assign row
+        used[bestRow] = true;
+    }
+
+    return newMat;
+}
+
+void Matrix::GaussJacobi()
+{
+    Matrix obj1(*this);
+    // Matrix ans = obj1.MakeDominant();
+    if(1)
+    {
+        std::cout << "The given matrix is dominant." << std::endl;
+        obj1.IterativeMethod();
+    }
+}
+
+void Matrix::GaussSeidal()
+{
+    Matrix obj1(*this);
+    // Matrix ans = obj1.MakeDominant();
+    if(1)
+    {
+        std::cout << "The given matrix is dominant." << std::endl;
+        obj1.IterativeMethodS();
+    }
+}
+
+void Matrix::IterativeMethodS()
+{
+    double tolerance = 0.00001;
+    polynomial p1;
+    double a = p1.X(0.0, 0.0);
+    double b = p1.Y(0.0, 0.0);
+    double c = p1.Z(0.0, 0.0);
+    int itr = 0;
+    while (itr < 50)
+    {
+
+        double x = p1.X(b, c);
+        double y = p1.Y(x, c);
+        double z = p1.Z(x, y);
+        double ans = a - x;
+
+        if (ans < 0)
+        {
+            if ((ans * -1) <= tolerance)
+                break;
+        }
+        else if ((ans) <= tolerance)
+            break;
+
+        cout << "Iteration " << itr << ": (" << a << ", " << b << ", " << c << ")" << endl;
+
+        // a = x;
+        b = y;
+        c = z;
+
+        itr++;
+    }
+}
+
+void Matrix::IterativeMethod()
+{
+    double tolerance = 0.00001;
+    polynomial p1;
+    double a = p1.X(0.0, 0.0);
+    double b = p1.Y(0.0, 0.0);
+    double c = p1.Z(0.0, 0.0);
+    int itr = 0;
+    while (itr < 50)
+    {
+
+        double x = p1.X(b, c);
+        double y = p1.Y(a, c);
+        double z = p1.Z(a, b);
+        double ans = a - x;
+
+        if (ans < 0)
+        {
+            if ((ans * -1) <= tolerance)
+                break;
+        }
+        else if ((ans) <= tolerance)
+            break;
+
+        cout << "Iteration " << itr << ": (" << a << ", " << b << ", " << c << ")" << endl;
+
+        a = x;
+        b = y;
+        c = z;
+
+        itr++;
+    }
 }
 
 Matrix Matrix::InverseMatrix()
@@ -276,17 +436,16 @@ Matrix Matrix::InverseMatrix()
     int n = rows;
     Matrix augmented(n, 2 * n);
 
-    // Create Augmented Matrix [A | I]
+    // augmented Matrix
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
             augmented.data[i][j] = this->data[i][j]; // Copy original matrix
 
         for (int j = 0; j < n; j++)
-            augmented.data[i][j + n] = (i == j) ? 1 : 0; // Identity matrix
+            augmented.data[i][j + n] = (i == j) ? 1 : 0;
     }
 
-    // Apply Gaussian Elimination
     for (int i = 0; i < n; i++)
     {
         // Find the maximum pivot
@@ -392,4 +551,3 @@ void Matrix::displayMatrix()
         cout << endl;
     }
 }
-
