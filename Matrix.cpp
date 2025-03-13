@@ -13,11 +13,13 @@ Matrix::Matrix()
     cols = 0;
 }
 
-Matrix::Matrix(int r, int c) : rows(r), cols(c), data(r, vector<double>(c, 0)) 
-{}
+Matrix::Matrix(int r, int c) : rows(r), cols(c), data(r, vector<double>(c, 0))
+{
+}
 
-Matrix::Matrix(const Matrix &mat) : rows(mat.rows), cols(mat.cols), data(mat.data) 
-{}
+Matrix::Matrix(const Matrix &mat) : rows(mat.rows), cols(mat.cols), data(mat.data)
+{
+}
 
 Matrix::~Matrix()
 {
@@ -161,12 +163,12 @@ Matrix Matrix::GaussElimination(const Matrix &mat)
         cerr << "Error: Augment matrix must have the same number of rows and exactly one column." << endl;
         return *this;
     }
-    
+
     // Augment the matrix
     Matrix obj1(*this); // Copy current matrix
-    
-    obj1.cols += 1;     // Increase column count
-    
+
+    obj1.cols += 1; // Increase column count
+
     for (int i = 0; i < rows; i++)
     {
         // Check if row size is as expected before augmentation
@@ -241,8 +243,8 @@ Matrix Matrix::GaussElimination(const Matrix &mat)
 
 Matrix Matrix::UpperMatrix()
 {
-    Matrix U(*this); 
-    
+    Matrix U(*this);
+
     int n = U.rows;
 
     for (int i = 0; i < n; i++)
@@ -254,7 +256,7 @@ Matrix Matrix::UpperMatrix()
 
         for (int k = i + 1; k < n; k++)
         {
-            double factor = U.data[k][i] / U.data[i][i]; 
+            double factor = U.data[k][i] / U.data[i][i];
 
             for (int j = i; j < U.cols; j++)
             {
@@ -269,15 +271,15 @@ Matrix Matrix::UpperMatrix()
 Matrix Matrix::LowerMatrix()
 {
     int n = rows;
-    Matrix L(n, n); 
+    Matrix L(n, n);
 
     for (int i = 0; i < n; i++)
     {
-        L.data[i][i] = 1; 
+        L.data[i][i] = 1;
 
         for (int k = i + 1; k < n; k++)
         {
-            if (fabs(data[i][i]) < 1e-9) 
+            if (fabs(data[i][i]) < 1e-9)
             {
                 throw std::runtime_error("LU decomposition is not possible (zero pivot detected).");
             }
@@ -285,17 +287,17 @@ Matrix Matrix::LowerMatrix()
             L.data[k][i] = data[k][i] / data[i][i]; // Store elimination factor
         }
     }
-    return L; 
+    return L;
 }
 
 Matrix Matrix::MakeDominant()
 {
     Matrix dominantMatrix(*this);
     int n = rows;
-    
+
     std::vector<bool> used(n, false); // Track used rows
     Matrix newMat(n, cols);
-    
+
     for (int i = 0; i < n; i++)
     {
         int bestRow = -1;
@@ -339,7 +341,7 @@ void Matrix::GaussJacobi()
 {
     Matrix obj1(*this);
     // Matrix ans = obj1.MakeDominant();
-    if(1)
+    if (1)
     {
         std::cout << "The given matrix is dominant." << std::endl;
         obj1.IterativeMethod();
@@ -350,27 +352,33 @@ void Matrix::GaussSeidal()
 {
     Matrix obj1(*this);
     // Matrix ans = obj1.MakeDominant();
-    if(1)
+    if (1)
     {
         std::cout << "The given matrix is dominant." << std::endl;
         obj1.IterativeMethodS();
     }
 }
 
+double Matrix::func(int row, double x, double y, int a, int b)
+{
+    Matrix obj1(*this);
+    return ((obj1.data[row][3]) + (-1 * obj1.data[row][a] * x) + (-1 * obj1.data[row][b] * y)) / obj1.data[row][row];
+}
+
 void Matrix::IterativeMethodS()
 {
+    Matrix obj1(*this);
     double tolerance = 0.00001;
-    polynomial p1;
-    double a = p1.X(0.0, 0.0);
-    double b = p1.Y(0.0, 0.0);
-    double c = p1.Z(0.0, 0.0);
+    double a = 0.0, x, y, z;
+    double b = 0.0;
+    double c = 0.0;
     int itr = 0;
-    while (itr < 50)
+    while (itr < 20)
     {
+        x = obj1.func(0, b, c, 1, 2);
+        y = obj1.func(1, x, c, 0, 2);
+        z = obj1.func(2, x, y, 0, 1);
 
-        double x = p1.X(b, c);
-        double y = p1.Y(x, c);
-        double z = p1.Z(x, y);
         double ans = a - x;
 
         if (ans < 0)
@@ -393,18 +401,19 @@ void Matrix::IterativeMethodS()
 
 void Matrix::IterativeMethod()
 {
-    double tolerance = 0.00001;
-    polynomial p1;
-    double a = p1.X(0.0, 0.0);
-    double b = p1.Y(0.0, 0.0);
-    double c = p1.Z(0.0, 0.0);
-    int itr = 0;
-    while (itr < 50)
-    {
+    Matrix obj1(*this);
 
-        double x = p1.X(b, c);
-        double y = p1.Y(a, c);
-        double z = p1.Z(a, b);
+    double tolerance = 0.00001;
+    double a = 0.0, y, x, z;
+    double b = 0.0;
+    double c = 0.0;
+    int itr = 0;
+    for (int i = 1; i < 20; i++)
+    {
+        x = obj1.func(0, b, c, 1, 2);
+        y = obj1.func(1, a, c, 0, 2);
+        z = obj1.func(2, a, b, 0, 1);
+
         double ans = a - x;
 
         if (ans < 0)

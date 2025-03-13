@@ -14,11 +14,13 @@ public:
     ~Matrix();
 
     void inputFileMatrix(const std::string File);
-    
+
     Matrix AddMatrix(const Matrix &mat);
     Matrix MultMatrix(const Matrix &mat);
     Matrix SubMatrix(const Matrix &mat);
-    
+
+    double func(int row, double x, double y, int a, int b);
+
     Matrix GaussElimination(const Matrix &mat);
     Matrix UpperMatrix();
     Matrix LowerMatrix();
@@ -34,5 +36,4 @@ public:
     void displayMatrix();
     double DeterminantMatrix();
     Matrix InverseMatrix();
-
 };

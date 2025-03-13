@@ -6,30 +6,29 @@ int main()
     cout << "Read From File And Print It" << endl;
     cout << "**************************************" << endl;
 
-    Matrix m2,m3;
+    Matrix m2, m3;
     // Read 49 X 49 Matrix
     cout << "49 X 49 Matrix:" << endl;
     m2.inputFileMatrix("Input/49l.txt");
     m3.inputFileMatrix("Input/49r.txt");
 
-    Matrix m4,m5;
-    // Read 225 X 225 Matri
+    Matrix m4, m5;
+    // Read 225 X 225 Matrix
     cout << "225 X 225 Matrix:" << endl;
     m4.inputFileMatrix("Input/225left.txt");
     m5.inputFileMatrix("Input/225right.txt");
 
     cout << "**************************************" << endl;
     cout << "49 X 49 Gauss Elim.." << endl;
-    cout << "**************************************" << endl;   
+    cout << "**************************************" << endl;
     Matrix ans1 = m2.GaussElimination(m3);
     ans1.displayMatrix();
-    
+
     cout << "**************************************" << endl;
     cout << "225 X 225 Gauss Elim.." << endl;
     cout << "**************************************" << endl;
     Matrix ans2 = m4.GaussElimination(m5);
     ans2.displayMatrix();
-
 
     cout << "**************************************" << endl;
     cout << "Read File" << endl;
@@ -56,12 +55,16 @@ int main()
     cout << "Gauss Jacobi" << endl;
     cout << "**************************************" << endl;
 
-    M1.GaussJacobi();
+    Matrix M9;
+    M9.inputFileMatrix("Input/newInput.txt");
+    M9.displayMatrix();
+
+    M9.GaussJacobi();
 
     cout << "**************************************" << endl;
     cout << "Gauss Seidal" << endl;
     cout << "**************************************" << endl;
-    M1.GaussSeidal();
+    M9.GaussSeidal();
 
     cout << "**************************************" << endl;
     cout << "End" << endl;
@@ -97,6 +100,6 @@ int main()
 24 Iterative Jacobi
 25 Iterative Seidal
 26 MakeDominant
- 
+
 
 */
