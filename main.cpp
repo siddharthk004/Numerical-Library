@@ -19,18 +19,6 @@ int main()
     m5.inputFileMatrix("Input/225right.txt");
 
     cout << "**************************************" << endl;
-    cout << "49 X 49 Gauss Elim.." << endl;
-    cout << "**************************************" << endl;
-    Matrix ans1 = m2.GaussElimination(m3);
-    ans1.displayMatrix();
-
-    cout << "**************************************" << endl;
-    cout << "225 X 225 Gauss Elim.." << endl;
-    cout << "**************************************" << endl;
-    Matrix ans2 = m4.GaussElimination(m5);
-    ans2.displayMatrix();
-
-    cout << "**************************************" << endl;
     cout << "Read File" << endl;
     cout << "**************************************" << endl;
 
@@ -51,20 +39,9 @@ int main()
     Matrix A = L.MultMatrix(U);
     A.displayMatrix();
 
-    cout << "**************************************" << endl;
-    cout << "Gauss Jacobi" << endl;
-    cout << "**************************************" << endl;
+    Matrix answer1 = M1.DolittleLU();
+    answer1.displayMatrix();
 
-    Matrix M9;
-    M9.inputFileMatrix("Input/newInput.txt");
-    M9.displayMatrix();
-
-    M9.GaussJacobi();
-
-    cout << "**************************************" << endl;
-    cout << "Gauss Seidal" << endl;
-    cout << "**************************************" << endl;
-    M9.GaussSeidal();
 
     cout << "**************************************" << endl;
     cout << "End" << endl;
@@ -100,6 +77,6 @@ int main()
 24 Iterative Jacobi
 25 Iterative Seidal
 26 MakeDominant
-
+27 dolittle LU
 
 */

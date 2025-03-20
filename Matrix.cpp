@@ -290,6 +290,51 @@ Matrix Matrix::LowerMatrix()
     return L;
 }
 
+Matrix Matrix::DolittleLU()
+{
+    Matrix U(*this);
+
+    int n = U.rows;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (fabs(U.data[i][i]) < 1e-9)
+        {
+            throw std::runtime_error("LU decomposition is not possible (zero pivot detected).");
+        }
+
+        for (int k = i + 1; k < n; k++)
+        {
+            double factor = U.data[k][i] / U.data[i][i];
+
+            for (int j = i; j < U.cols; j++)
+            {
+                U.data[k][j] -= factor * U.data[i][j];
+            }
+        }
+    }
+
+    n = rows;
+    Matrix L(n, n);
+
+    for (int i = 0; i < n; i++)
+    {
+        L.data[i][i] = 1;
+
+        for (int k = i + 1; k < n; k++)
+        {
+            if (fabs(data[i][i]) < 1e-9)
+            {
+                throw std::runtime_error("LU decomposition is not possible (zero pivot detected).");
+            }
+
+            L.data[k][i] = data[k][i] / data[i][i]; // Store elimination factor
+        }
+    }
+    Matrix ans = L.MultMatrix(U);
+    return ans;
+}
+
 Matrix Matrix::MakeDominant()
 {
     Matrix dominantMatrix(*this);

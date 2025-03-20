@@ -25,6 +25,7 @@ public:
     Matrix UpperMatrix();
     Matrix LowerMatrix();
 
+    Matrix DolittleLU();
     void GaussJacobi();
     void GaussSeidal();
 
