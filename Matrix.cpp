@@ -335,13 +335,32 @@ Matrix Matrix::DolittleLU()
     return ans;
 }
 
+bool Matrix::IsDominant()
+{
+    int n = rows;
+    for (int i = 0; i < n; i++)
+    {
+        double maxRowSum = 0.0;
+        for (int j = 0; j < n; j++)
+        {
+            if (i != j)
+                maxRowSum += fabs(data[i][j]);
+        }
+        if (fabs(data[i][i]) < maxRowSum)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 Matrix Matrix::MakeDominant()
 {
     Matrix dominantMatrix(*this);
     int n = rows;
 
-    std::vector<bool> used(n, false); // Track used rows
-    Matrix newMat(n, cols);
+    std::vector<bool> used(rows, false);
+    Matrix newMat(rows, cols);
 
     for (int i = 0; i < n; i++)
     {
@@ -385,22 +404,33 @@ Matrix Matrix::MakeDominant()
 void Matrix::GaussJacobi()
 {
     Matrix obj1(*this);
-    // Matrix ans = obj1.MakeDominant();
-    if (1)
+
+    if (obj1.IsDominant())
     {
         std::cout << "The given matrix is dominant." << std::endl;
         obj1.IterativeMethod();
+    }
+    else
+    {
+        Matrix Ans = obj1.MakeDominant();
+        Ans.IterativeMethod();
     }
 }
 
 void Matrix::GaussSeidal()
 {
+
     Matrix obj1(*this);
-    // Matrix ans = obj1.MakeDominant();
-    if (1)
+
+    if (obj1.IsDominant())
     {
-        std::cout << "The given matrix is dominant." << std::endl;
+        std::cout << "Using Gauss-Seidel method:" << std::endl;
         obj1.IterativeMethodS();
+    }
+    else
+    {
+        Matrix Ans = obj1.MakeDominant();
+        Ans.IterativeMethodS();
     }
 }
 

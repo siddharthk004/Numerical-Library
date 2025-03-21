@@ -13,28 +13,25 @@ public:
     Matrix(const Matrix &mat);
     ~Matrix();
 
-    void inputFileMatrix(const std::string File);
-
     Matrix AddMatrix(const Matrix &mat);
     Matrix MultMatrix(const Matrix &mat);
     Matrix SubMatrix(const Matrix &mat);
-
-    double func(int row, double x, double y, int a, int b);
-
     Matrix GaussElimination(const Matrix &mat);
     Matrix UpperMatrix();
     Matrix LowerMatrix();
-
     Matrix DolittleLU();
-    void GaussJacobi();
-    void GaussSeidal();
-
     Matrix MakeDominant();
-    void IterativeMethod();
-    void IterativeMethodS();
+    Matrix InverseMatrix();
+
     bool isDiagonal();
     bool isIdentity();
+    bool IsDominant();
+    void GaussJacobi();
+    void GaussSeidal();
+    void IterativeMethod();
+    void IterativeMethodS();
     void displayMatrix();
+    void inputFileMatrix(const std::string File);
+    double func(int row, double x, double y, int a, int b);
     double DeterminantMatrix();
-    Matrix InverseMatrix();
 };

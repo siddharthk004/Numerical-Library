@@ -6,11 +6,14 @@ int main()
     cout << "Read From File And Print It" << endl;
     cout << "**************************************" << endl;
 
-    Matrix m2, m3;
+    Matrix m2, m3, M6, M7;
     // Read 49 X 49 Matrix
     cout << "49 X 49 Matrix:" << endl;
     m2.inputFileMatrix("Input/49l.txt");
     m3.inputFileMatrix("Input/49r.txt");
+    
+    M6.inputFileMatrix("Input/input1X.txt");
+    M7.inputFileMatrix("Input/input2.txt");
 
     Matrix m4, m5;
     // Read 225 X 225 Matrix
@@ -42,6 +45,35 @@ int main()
     Matrix answer1 = M1.DolittleLU();
     answer1.displayMatrix();
 
+
+    cout << "**************************************" << endl;
+    cout << "A = L.U 49 X 49" << endl;
+    cout << "**************************************" << endl;
+
+    Matrix U1 = m2.UpperMatrix();
+    U1.displayMatrix();
+
+    Matrix L1 = m2.LowerMatrix();
+    L1.displayMatrix();
+
+    Matrix A1 = L1.MultMatrix(U1);
+    A1.displayMatrix();
+
+    Matrix answer2 = m2.DolittleLU();
+    answer2.displayMatrix();
+
+
+    cout << "**************************************" << endl;
+    cout << "Gauss Jacobi" << endl;
+    cout << "**************************************" << endl;
+    M6.GaussJacobi();
+    M7.GaussJacobi();
+
+    cout << "**************************************" << endl;
+    cout << "Gauss seidal" << endl;
+    cout << "**************************************" << endl;
+    M6.GaussSeidal();
+    M7.GaussSeidal();
 
     cout << "**************************************" << endl;
     cout << "End" << endl;
@@ -78,5 +110,4 @@ int main()
 25 Iterative Seidal
 26 MakeDominant
 27 dolittle LU
-
 */
