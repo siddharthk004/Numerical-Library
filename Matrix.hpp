@@ -32,6 +32,7 @@ public:
     void IterativeMethodS();
     void displayMatrix();
     void inputFileMatrix(const std::string File);
+
     double func(int row, double x, double y, int a, int b);
     double DeterminantMatrix();
 };
