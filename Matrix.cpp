@@ -401,111 +401,94 @@ Matrix Matrix::MakeDominant()
     return newMat;
 }
 
-void Matrix::GaussJacobi()
-{
-    Matrix obj1(*this);
+void Matrix::IterativeMethod() {
+    int size = data.size();
+    vector<double> variables(size, 0.0); // Initial guess: all zeros
+    vector<double> prevVariables(size, 0.0);
+    double tolerance = 1e-5;
+    int maxIterations = 100;
 
-    if (obj1.IsDominant())
-    {
-        std::cout << "The given matrix is dominant." << std::endl;
-        obj1.IterativeMethod();
+    cout << "Using Gauss-Jacobi method:" << endl;
+
+    for (int itr = 0; itr < maxIterations; itr++) {
+        for (int i = 0; i < size; i++) {
+            variables[i] = func(i, prevVariables); // Compute new values
+        }
+
+        // Check for convergence
+        double maxError = 0.0;
+        for (int i = 0; i < size; i++) {
+            maxError = max(maxError, abs(variables[i] - prevVariables[i]));
+        }
+
+        cout << "Iteration " << itr + 1 << ": ";
+        for (double val : variables) cout << val << " ";
+        cout << endl;
+
+        if (maxError < tolerance) break;
+
+        prevVariables = variables; // Update for next iteration
     }
-    else
-    {
-        Matrix Ans = obj1.MakeDominant();
+}
+
+void Matrix::GaussJacobi() {
+    if (IsDominant()) {
+        IterativeMethod();
+    } else {
+        Matrix Ans = MakeDominant();
         Ans.IterativeMethod();
     }
 }
 
-void Matrix::GaussSeidal()
-{
-
-    Matrix obj1(*this);
-
-    if (obj1.IsDominant())
-    {
-        std::cout << "Using Gauss-Seidel method:" << std::endl;
-        obj1.IterativeMethodS();
+double Matrix::func(int row, const vector<double>& variables) {
+    int size = data.size(); // Get the size of the matrix
+    double sum = data[row][size]; // Start with the constant term (right-hand side)
+    
+    for (int j = 0; j < size; j++) {
+        if (j != row) {
+            sum -= data[row][j] * variables[j];
+        }
     }
-    else
-    {
-        Matrix Ans = obj1.MakeDominant();
+    
+    return sum / data[row][row]; // Divide by the diagonal element
+}
+
+void Matrix::IterativeMethodS() {
+    int size = data.size();
+
+    vector<double> variables(size, 0.0); // Initial guess: all zeros
+    double tolerance = 1e-5;
+    int maxIterations = 100;
+
+    cout << "Using Gauss-Seidel method:" << endl;
+
+    for (int itr = 0; itr < maxIterations; itr++) {
+        vector<double> prevVariables = variables;
+
+        for (int i = 0; i < size; i++) {
+            variables[i] = func(i, variables);
+        }
+
+        // Check for convergence
+        double maxError = 0.0;
+        for (int i = 0; i < size; i++) {
+            maxError = max(maxError, abs(variables[i] - prevVariables[i]));
+        }
+
+        cout << "Iteration " << itr + 1 << ": ";
+        for (double val : variables) cout << val << " ";
+        cout << endl;
+
+        if (maxError < tolerance) break;
+    }
+}
+
+void Matrix::GaussSeidel() {
+    if (IsDominant()) {
+        IterativeMethodS();
+    } else {
+        Matrix Ans = MakeDominant();
         Ans.IterativeMethodS();
-    }
-}
-
-double Matrix::func(int row, double x, double y, int a, int b)
-{
-    Matrix obj1(*this);
-    return ((obj1.data[row][3]) + (-1 * obj1.data[row][a] * x) + (-1 * obj1.data[row][b] * y)) / obj1.data[row][row];
-}
-
-void Matrix::IterativeMethodS()
-{
-    Matrix obj1(*this);
-    double tolerance = 0.00001;
-    double a = 0.0, x, y, z;
-    double b = 0.0;
-    double c = 0.0;
-    int itr = 0;
-    while (itr < 20)
-    {
-        x = obj1.func(0, b, c, 1, 2);
-        y = obj1.func(1, x, c, 0, 2);
-        z = obj1.func(2, x, y, 0, 1);
-
-        double ans = a - x;
-
-        if (ans < 0)
-        {
-            if ((ans * -1) <= tolerance)
-                break;
-        }
-        else if ((ans) <= tolerance)
-            break;
-
-        cout << "Iteration " << itr << ": (" << a << ", " << b << ", " << c << ")" << endl;
-
-        // a = x;
-        b = y;
-        c = z;
-
-        itr++;
-    }
-}
-
-void Matrix::IterativeMethod()
-{
-    Matrix obj1(*this);
-
-    double tolerance = 0.00001;
-    double a = 0.0, y, x, z;
-    double b = 0.0;
-    double c = 0.0;
-    int itr = 0;
-    for (int i = 1; i < 20; i++)
-    {
-        x = obj1.func(0, b, c, 1, 2);
-        y = obj1.func(1, a, c, 0, 2);
-        z = obj1.func(2, a, b, 0, 1);
-
-        double ans = a - x;
-
-        if (ans < 0)
-        {
-            if ((ans * -1) <= tolerance)
-                break;
-        }
-        else if ((ans) <= tolerance)
-            break;
-
-        cout << "Iteration " << itr << ": (" << a << ", " << b << ", " << c << ")" << endl;
-
-        a = x;
-        b = y;
-        c = z;
-
-        itr++;
     }
 }
 
@@ -634,4 +617,8 @@ void Matrix::displayMatrix()
             cout << data[i][j] << " ";
         cout << endl;
     }
+}
+
+int Matrix::size() const {
+    return rows;
 }

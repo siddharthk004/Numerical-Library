@@ -1,3 +1,7 @@
+
+#ifndef MATRIX_HPP
+#define MATRIX_HPP
+
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -27,11 +31,22 @@ public:
     bool isIdentity();
     bool IsDominant();
     void GaussJacobi();
-    void GaussSeidal();
+    void GaussSeidel();
+    void displayMatrix();
     void IterativeMethod();
     void IterativeMethodS();
-    void displayMatrix();
-    void inputFileMatrix(const std::string File);
-    double func(int row, double x, double y, int a, int b);
     double DeterminantMatrix();
+    void inputFileMatrix(const std::string File);
+    double func(int row, const vector<double> &prevVariables);
+    std::vector<double> &operator[](int index)
+    {
+        return data[index];
+    }
+    const std::vector<double> &operator[](int index) const
+    {
+        return data[index];
+    }
+    int size() const;
 };
+
+#endif

@@ -1,82 +1,97 @@
 #include "Matrix.hpp"
+#include "Polation.hpp"
 
 int main()
 {
-    cout << "**************************************" << endl;
-    cout << "Read From File And Print It" << endl;
-    cout << "**************************************" << endl;
+    Matrix m1,m2;
+    m1.inputFileMatrix("Input/vec1polation.txt");
+    m2.inputFileMatrix("Input/vec2polation.txt");
+    double x = -1;
+    Polation ans;
+    double result = ans.lagrangeInterpolation(x,m1,m2);
+    cout << "Interpolated value at x = " << x << " is " << result << endl;
 
-    Matrix m2, m3, M6, M7;
-    // Read 49 X 49 Matrix
-    cout << "49 X 49 Matrix:" << endl;
-    m2.inputFileMatrix("Input/49l.txt");
-    m3.inputFileMatrix("Input/49r.txt");
+
+
+
+
+    // // double Ans1 = ans.lagrangeI(-1);
+    // // cout << "Interpolated value at -1 = " << Ans1 << endl;
+    // cout << "**************************************" << endl;
+    // cout << "Read From File And Print It" << endl;
+    // cout << "**************************************" << endl;
+
+    // Matrix m2, m3, M6, M7;
+    // // Read 49 X 49 Matrix
+    // cout << "49 X 49 Matrix:" << endl;
+    // m2.inputFileMatrix("Input/49l.txt");
+    // m3.inputFileMatrix("Input/49r.txt");
     
-    M6.inputFileMatrix("Input/input1X.txt");
-    M7.inputFileMatrix("Input/input2.txt");
+    // M6.inputFileMatrix("Input/input1X.txt");
+    // M7.inputFileMatrix("Input/input2.txt");
 
-    Matrix m4, m5;
-    // Read 225 X 225 Matrix
-    cout << "225 X 225 Matrix:" << endl;
-    m4.inputFileMatrix("Input/225left.txt");
-    m5.inputFileMatrix("Input/225right.txt");
+    // Matrix m4, m5;
+    // // Read 225 X 225 Matrix
+    // cout << "225 X 225 Matrix:" << endl;
+    // m4.inputFileMatrix("Input/225left.txt");
+    // m5.inputFileMatrix("Input/225right.txt");
 
-    cout << "**************************************" << endl;
-    cout << "Read File" << endl;
-    cout << "**************************************" << endl;
+    // cout << "**************************************" << endl;
+    // cout << "Read File" << endl;
+    // cout << "**************************************" << endl;
 
-    Matrix M1;
-    M1.inputFileMatrix("Input/input1.txt");
-    M1.displayMatrix();
+    // Matrix M1;
+    // M1.inputFileMatrix("Input/input1.txt");
+    // M1.displayMatrix();
 
-    cout << "**************************************" << endl;
-    cout << "A = L.U" << endl;
-    cout << "**************************************" << endl;
+    // cout << "**************************************" << endl;
+    // cout << "A = L.U" << endl;
+    // cout << "**************************************" << endl;
 
-    Matrix U = M1.UpperMatrix();
-    U.displayMatrix();
+    // Matrix U = M1.UpperMatrix();
+    // U.displayMatrix();
 
-    Matrix L = M1.LowerMatrix();
-    L.displayMatrix();
+    // Matrix L = M1.LowerMatrix();
+    // L.displayMatrix();
 
-    Matrix A = L.MultMatrix(U);
-    A.displayMatrix();
+    // Matrix Choleski = L.MultMatrix(U);
+    // Choleski.displayMatrix();
 
-    Matrix answer1 = M1.DolittleLU();
-    answer1.displayMatrix();
-
-
-    cout << "**************************************" << endl;
-    cout << "A = L.U 49 X 49" << endl;
-    cout << "**************************************" << endl;
-
-    Matrix U1 = m2.UpperMatrix();
-    U1.displayMatrix();
-
-    Matrix L1 = m2.LowerMatrix();
-    L1.displayMatrix();
-
-    Matrix A1 = L1.MultMatrix(U1);
-    A1.displayMatrix();
-
-    Matrix answer2 = m2.DolittleLU();
-    answer2.displayMatrix();
+    // Matrix answer1 = M1.DolittleLU();
+    // answer1.displayMatrix();
 
 
-    cout << "**************************************" << endl;
-    cout << "Gauss Jacobi" << endl;
-    cout << "**************************************" << endl;
-    M6.GaussJacobi();
-    M7.GaussJacobi();
+    // cout << "**************************************" << endl;
+    // cout << "A = L.U 49 X 49" << endl;
+    // cout << "**************************************" << endl;
 
-    cout << "**************************************" << endl;
-    cout << "Gauss seidal" << endl;
-    cout << "**************************************" << endl;
-    M6.GaussSeidal();
-    M7.GaussSeidal();
+    // Matrix U1 = m2.UpperMatrix();
+    // U1.displayMatrix();
 
-    cout << "**************************************" << endl;
-    cout << "End" << endl;
+    // Matrix L1 = m2.LowerMatrix();
+    // L1.displayMatrix();
+
+    // Matrix A1 = L1.MultMatrix(U1);
+    // A1.displayMatrix();
+
+    // Matrix answer2 = m2.DolittleLU();
+    // answer2.displayMatrix();
+
+
+    // cout << "**************************************" << endl;
+    // cout << "Gauss Jacobi" << endl;
+    // cout << "**************************************" << endl;
+    // M6.GaussJacobi();
+    // // M7.GaussJacobi();
+
+    // cout << "**************************************" << endl;
+    // cout << "Gauss seidal" << endl;
+    // cout << "**************************************" << endl;
+    // M6.GaussSeidel();
+    // M7.GaussSeidel();
+
+    // cout << "**************************************" << endl;
+    // cout << "End" << endl;
     cout << "**************************************" << endl;
 
     return 0;
@@ -110,4 +125,6 @@ int main()
 25 Iterative Seidal
 26 MakeDominant
 27 dolittle LU
+28 IsDominant
+29 
 */
