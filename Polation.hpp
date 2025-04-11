@@ -11,4 +11,6 @@ public:
     // double PowerFit();
     double lagrangeI(double x);
     // double ExponentialFit();
+    double lineFunc(double xi, double a, double b, double c);
+    double LineParabola(Matrix x,Matrix y);
 };

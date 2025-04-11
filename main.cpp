@@ -12,6 +12,14 @@ int main()
     cout << "Interpolated value at x = " << x << " is " << result << endl;
 
 
+    cout << "**************************************" << endl;
+
+    Matrix l1,l2;
+    l1.inputFileMatrix("Input/line1.txt");
+    l2.inputFileMatrix("Input/line2.txt");
+    double line = ans.LineParabola(l1,l2);
+
+    cout << "Ax2 + Bx + c  value = " << line << endl;
 
 
 
