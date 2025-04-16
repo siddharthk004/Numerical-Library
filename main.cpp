@@ -22,7 +22,6 @@ int main()
     cout << "Ax2 + Bx + c  value = " << line << endl;
 
 
-
     // // double Ans1 = ans.lagrangeI(-1);
     // // cout << "Interpolated value at -1 = " << Ans1 << endl;
     // cout << "**************************************" << endl;

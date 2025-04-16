@@ -25,6 +25,9 @@ double Polation::lagrangeI(double x)
     return (3 * (x * x) - (2 * x) + 1);
 }
 
+
+// Ax^2 + Bx + C
+
 double Polation::LineParabola(Matrix x, Matrix y)
 {
     int n = x[0].size();  // assuming x is 1xN
@@ -76,6 +79,7 @@ double Polation::LineParabola(Matrix x, Matrix y)
     Polation p1;
     Matrix ans = M1.GaussElimination(M2);
     ans.displayMatrix();
+    cout << "Ax2 + Bx + c  value = " << ans[0][0] <<"X^2"<< ans[1][0] <<"X"<< ans[2][0]<< endl;
 
     double totalError = 0.0;
     for (int i = 0; i < n; i++)
