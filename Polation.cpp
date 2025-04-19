@@ -1,6 +1,7 @@
 #include "Polation.hpp"
 #include<math.h>
 
+
 double Polation::lagrangeInterpolation(double x, Matrix EQ1, Matrix EQ2)
 {
     int n = EQ1.size();
