@@ -15,7 +15,7 @@ public:
     double LineParabola(Matrix x, Matrix y);
     double PowerFit(Matrix x, Matrix y);
     double ExponentialFit(Matrix x, Matrix y);
-    double Tchebyshev(int n, double x);
 
-    
+
+    double Tchebyshev(int n, double x);
 };
