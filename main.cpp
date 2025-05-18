@@ -3,23 +3,40 @@
 
 int main()
 {
-    Matrix m1,m2;
-    m1.inputFileMatrix("Input/vec1polation.txt");
-    m2.inputFileMatrix("Input/vec2polation.txt");
-    double x = -1;
-    Polation ans;
-    double result = ans.lagrangeInterpolation(x,m1,m2);
-    cout << "Interpolated value at x = " << x << " is " << result << endl;
 
+
+
+    // Matrix m1,m2;
+    // m1.inputFileMatrix("Input/vec1polation.txt");
+    // m2.inputFileMatrix("Input/vec2polation.txt");
+    // double x = -1;
+    Polation ans;
+    // double result = ans.lagrangeInterpolation(x,m1,m2);
+    // cout << "Interpolated value at x = " << x << " is " << result << endl;
+
+    Polation p;
+    int n = 5;
+    double x = 0.6;
+    std::cout << "T_" << n << "(" << x << ") = " << p.Tchebyshev(n, x) << std::endl;
 
     cout << "**************************************" << endl;
 
-    Matrix l1,l2;
+    Matrix l1,l2,l3,l4;
     l1.inputFileMatrix("Input/line1.txt");
     l2.inputFileMatrix("Input/line2.txt");
-    double line = ans.LineParabola(l1,l2);
+    l3.inputFileMatrix("Input/vec1polation.txt");
+    l4.inputFileMatrix("Input/vec2polation.txt");
+    double line1 = ans.LineParabola(l1,l2);
 
-    cout << "Ax2 + Bx + c  value = " << line << endl;
+    cout << "Ax2 + Bx + c  value = " << line1 << endl;
+
+    double line = ans.ExponentialFit(l3,l4);
+
+    cout << "Expo Fit = " << line << endl;
+
+    double line2 = ans.PowerFit(l3,l4);
+
+    cout << "Power fit = " << line2 << endl;
 
 
     // // double Ans1 = ans.lagrangeI(-1);
