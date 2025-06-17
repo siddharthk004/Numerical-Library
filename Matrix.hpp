@@ -26,7 +26,7 @@ public:
     Matrix DolittleLU();
     Matrix MakeDominant();
     Matrix InverseMatrix();
-
+ 
     bool isDiagonal();
     bool isIdentity();
     bool IsDominant();
@@ -38,6 +38,7 @@ public:
     double DeterminantMatrix();
     void inputFileMatrix(const std::string File);
     double func(int row, const vector<double> &prevVariables);
+
     std::vector<double> &operator[](int index)
     {
         return data[index];
@@ -46,6 +47,7 @@ public:
     {
         return data[index];
     }
+
     int size() const;
 };
 

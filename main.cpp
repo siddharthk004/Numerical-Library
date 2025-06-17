@@ -1,43 +1,45 @@
 #include "Matrix.hpp"
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include "Polation.hpp"
 
 int main()
 {
 
 
-
-    // Matrix m1,m2;
+    Matrix m1,m2;
     // m1.inputFileMatrix("Input/vec1polation.txt");
     // m2.inputFileMatrix("Input/vec2polation.txt");
     // double x = -1;
-    Polation ans;
+    // Polation ans;
     // double result = ans.lagrangeInterpolation(x,m1,m2);
     // cout << "Interpolated value at x = " << x << " is " << result << endl;
 
-    Polation p;
-    int n = 5;
-    double x = 0.6;
-    std::cout << "T_" << n << "(" << x << ") = " << p.Tchebyshev(n, x) << std::endl;
+    // Polation p;
+    // int n = 5;
+    // double x = 0.6;
+    // std::cout << "T_" << n << "(" << x << ") = " << p.Tchebyshev(n, x) << std::endl;
 
-    cout << "**************************************" << endl;
+    // cout << "**************************************" << endl;
 
-    Matrix l1,l2,l3,l4;
-    l1.inputFileMatrix("Input/line1.txt");
-    l2.inputFileMatrix("Input/line2.txt");
-    l3.inputFileMatrix("Input/vec1polation.txt");
-    l4.inputFileMatrix("Input/vec2polation.txt");
-    double line1 = ans.LineParabola(l1,l2);
+    // Matrix l1,l2,l3,l4;
+    // l1.inputFileMatrix("Input/line1.txt");
+    // l2.inputFileMatrix("Input/line2.txt");
+    // l3.inputFileMatrix("Input/vec1polation.txt");
+    // l4.inputFileMatrix("Input/vec2polation.txt");
+    // double line1 = ans.LineParabola(l1,l2);
 
-    cout << "Ax2 + Bx + c  value = " << line1 << endl;
+    // cout << "Ax2 + Bx + c  value = " << line1 << endl;
 
-    double line = ans.ExponentialFit(l3,l4);
+    // double line = ans.ExponentialFit(l3,l4);
 
-    cout << "Expo Fit = " << line << endl;
+    // cout << "Expo Fit = " << line << endl;
 
-    double line2 = ans.PowerFit(l3,l4);
+    // double line2 = ans.PowerFit(l3,l4);
 
-    cout << "Power fit = " << line2 << endl;
-
+    // cout << "Power fit = " << line2 << endl;
+    ///////////////////////////////////////////////////////////
 
     // // double Ans1 = ans.lagrangeI(-1);
     // // cout << "Interpolated value at -1 = " << Ans1 << endl;
@@ -48,7 +50,7 @@ int main()
     // Matrix m2, m3, M6, M7;
     // // Read 49 X 49 Matrix
     // cout << "49 X 49 Matrix:" << endl;
-    // m2.inputFileMatrix("Input/49l.txt");
+    m2.inputFileMatrix("Input/ex1.txt");
     // m3.inputFileMatrix("Input/49r.txt");
     
     // M6.inputFileMatrix("Input/input1X.txt");
@@ -64,9 +66,9 @@ int main()
     // cout << "Read File" << endl;
     // cout << "**************************************" << endl;
 
-    // Matrix M1;
-    // M1.inputFileMatrix("Input/input1.txt");
-    // M1.displayMatrix();
+    Matrix M6;
+    M6.inputFileMatrix("Input/b1.txt");
+    M6.displayMatrix();
 
     // cout << "**************************************" << endl;
     // cout << "A = L.U" << endl;
@@ -85,18 +87,78 @@ int main()
     // answer1.displayMatrix();
 
 
-    // cout << "**************************************" << endl;
-    // cout << "A = L.U 49 X 49" << endl;
-    // cout << "**************************************" << endl;
+    
+    Matrix paper,Ans;
+    paper.inputFileMatrix("Input/p1.txt");
 
-    // Matrix U1 = m2.UpperMatrix();
-    // U1.displayMatrix();
+    Matrix o1,o2,o3,o4;
+    int n = paper.rows;
+    paper.cols += 1;
 
-    // Matrix L1 = m2.LowerMatrix();
-    // L1.displayMatrix();
 
-    // Matrix A1 = L1.MultMatrix(U1);
-    // A1.displayMatrix();
+
+    
+    o2.inputFileMatrix("Input/p2.txt");
+
+    for(int i = 0;i < n;i++)
+    {
+        paper.data[i].push_back(o2.data[i][0]);
+    }
+    paper.displayMatrix();
+
+    o3.inputFileMatrix("Input/p3.txt");
+    paper.cols += 1;
+    for(int i = 0;i < n;i++)
+    {
+        paper.data[i].push_back(o3.data[i][0]);
+    }
+    paper.displayMatrix();
+
+    o4.inputFileMatrix("Input/p4.txt");
+    paper.cols += 1;
+    for(int i = 0;i < n;i++)
+    {
+        paper.data[i].push_back(o4.data[i][0]);
+    }
+    paper.displayMatrix();
+
+
+
+
+
+    cout << "**************************************" << endl;
+    cout << "LU" << endl;
+    cout << "**************************************" << endl;
+
+    cout << "Upper" << endl;
+
+    Matrix U1 = paper.UpperMatrix();
+    U1.displayMatrix();
+
+    cout << "Lower" << endl;
+
+    Matrix L1 = paper.LowerMatrix();
+    L1.displayMatrix();
+
+    // U1.MultMatrix(L1);
+
+
+    cout << "Ans" << endl;
+    Matrix A1 = L1.MultMatrix(U1);
+    A1.displayMatrix();
+    
+
+    Matrix q2 = paper.GaussElimination(M6);
+    q2.displayMatrix();
+
+    Matrix q3 = paper.MultMatrix(q2);
+    q3.displayMatrix();
+    
+    Matrix q4 = A1.MultMatrix(q2);
+    q4.displayMatrix();
+    
+    Matrix q5 = paper.MultMatrix(q2);
+    q5.displayMatrix();
 
     // Matrix answer2 = m2.DolittleLU();
     // answer2.displayMatrix();
@@ -116,7 +178,7 @@ int main()
 
     // cout << "**************************************" << endl;
     // cout << "End" << endl;
-    cout << "**************************************" << endl;
+    // cout << "**************************************" << endl;
 
     return 0;
 }
