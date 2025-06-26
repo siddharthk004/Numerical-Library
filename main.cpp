@@ -87,18 +87,17 @@ int main()
     // answer1.displayMatrix();
 
 
-    
     Matrix paper,Ans;
     paper.inputFileMatrix("Input/p1.txt");
 
     Matrix o1,o2,o3,o4;
     int n = paper.rows;
     paper.cols += 1;
-
-
+    o2.inputFileMatrix("Input/p2.txt");
 
     
-    o2.inputFileMatrix("Input/p2.txt");
+
+    
 
     for(int i = 0;i < n;i++)
     {
