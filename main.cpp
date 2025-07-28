@@ -95,10 +95,6 @@ int main()
     paper.cols += 1;
     o2.inputFileMatrix("Input/p2.txt");
 
-    
-
-    
-
     for(int i = 0;i < n;i++)
     {
         paper.data[i].push_back(o2.data[i][0]);
