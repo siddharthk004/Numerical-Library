@@ -1,20 +1,39 @@
+
+########################################
+# Name :- Siddharth Satish Kardile     #
+# Numerical-II Library in PY           #
+########################################
+
 from interpolation import Interpolation
 
-
+########################
+#    Interpolation     #
+########################
+ 
 interp = Interpolation()
 
+# Langranges Interpolation
+x_pts = [-2,0,2]
+y_pts = [4,2,3]
+x = float(input("Enter Value of X for lagrange interplation: "))
+print("Lagrange at :", interp.lagrange(x_pts, y_pts, x))
 
-x_points = [-2,0,2]
-y_points = [4,2,3]
-x = 2
-print("Lagrange at :", interp.lagrange(x_points, y_points, x))
+# Forward Interpolation
+x_pts = [-2,0,1,2]
+y_pts = [1,1,4,17]
+x = float(input("Enter Value of X for forward interpolation: "))
+print("Forward at :", interp.forward(x_pts, y_pts, x))
 
-x_points = [-2,0,1,2]
-y_points = [1,1,4,17]
-x = 1
-print("Forward at :", interp.forward(x_points, y_points, x))
+# Backward Interpolation
+x_pts = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
+y_pts = [7.989, 8.403, 8.781, 9.129, 9.451, 9.750, 10.031]
+x = float(input("Enter Value of X for Backward interpolation: "))
+print("Backward at :", interp.backward(x_pts, y_pts, x))
 
-x_points = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
-y_points = [7.989, 8.403, 8.781, 9.129, 9.451, 9.750, 10.031]
-x = 1.2
-print("Backward at :", interp.backward(x_points, y_points, x))
+# Strling Interpolation
+
+# Divided Difference Interpolation
+
+##############################
+#   Numerical Integration    #
+##############################

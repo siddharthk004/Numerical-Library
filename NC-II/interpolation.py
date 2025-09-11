@@ -1,6 +1,5 @@
 
 class Interpolation:
-
     def lagrange(self, x_points, y_points, x):
         n = len(x_points)
         res = 0
@@ -30,6 +29,8 @@ class Interpolation:
                 val = diff[i - 1][j + 1] - diff[i - 1][j]
                 row.append(val)
                 j = j + 1
+                # print(val)
+            # print("\n")
             diff.append(row)
             i = i + 1
 
@@ -59,6 +60,8 @@ class Interpolation:
                 val = diff[i - 1][j + 1] - diff[i - 1][j]
                 row.append(val)
                 j = j + 1
+            #    print(val)
+        #    print("\n")
             diff.append(row)
             i = i + 1
 
@@ -73,5 +76,3 @@ class Interpolation:
             res = res + (uterm * diff[i][0]) / fact
             i = i + 1
         return res
-    
-    
