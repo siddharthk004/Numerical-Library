@@ -5,35 +5,42 @@
 ########################################
 
 from interpolation import Interpolation
+from NumericalIntegration import NumericalIntegration
 
 ########################
 #    Interpolation     #
 ########################
- 
-interp = Interpolation()
+print("---------------------------------------------------")
 
-# Langranges Interpolation
 x_pts = [-2,0,2]
 y_pts = [4,2,3]
-x = float(input("Enter Value of X for lagrange interplation: "))
-print("Lagrange at :", interp.lagrange(x_pts, y_pts, x))
 
-# Forward Interpolation
-x_pts = [-2,0,1,3]
-y_pts = [1,1,4,17]
-x = float(input("Enter Value of X for forward interpolation: "))
-print("Forward at :", interp.forward(x_pts, y_pts, x))
+interp = Interpolation(x_pts, y_pts)
 
-# Backward Interpolation
-x_pts = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
-y_pts = [7.989, 8.403, 8.781, 9.129, 9.451, 9.750, 10.031]
-x = float(input("Enter Value of X for Backward interpolation: "))
-print("Backward at :", interp.backward(x_pts, y_pts, x))
+x = float(input("Enter X: "))
 
-# Strling Interpolation
+print("---------------------------------------------------")
 
-# Divided Difference Interpolation
+print("Lagrange interpolation:", interp.lagrange(x))
+print("Forward interpolation:", interp.forward(x))
+print("Backward interpolation:", interp.backward(x))
+print("Stirling interpolation:", interp.stirling(x))
+print("Newton Divided Difference:", interp.divided_difference(x))
+
+
+print("---------------------------------------------------")
 
 ##############################
 #   Numerical Integration    #
 ##############################
+
+x_points = [0,1,2,3]
+y_points = [0,1,4,9]
+
+ni = NumericalIntegration(x_points, y_points)
+
+print("Trapezoidal:", ni.trapezoidal())
+print("Simpson 1/3:", ni.simpson_one_third())
+print("Simpson 3/8:", ni.simpson_three_eighth())
+
+print("---------------------------------------------------")
