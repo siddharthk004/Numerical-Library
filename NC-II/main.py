@@ -19,7 +19,7 @@ x = float(input("Enter Value of X for lagrange interplation: "))
 print("Lagrange at :", interp.lagrange(x_pts, y_pts, x))
 
 # Forward Interpolation
-x_pts = [-2,0,1,2]
+x_pts = [-2,0,1,3]
 y_pts = [1,1,4,17]
 x = float(input("Enter Value of X for forward interpolation: "))
 print("Forward at :", interp.forward(x_pts, y_pts, x))
