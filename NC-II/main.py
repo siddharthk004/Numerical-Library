@@ -27,7 +27,6 @@ print("Backward interpolation:", interp.backward(x))
 print("Stirling interpolation:", interp.stirling(x))
 print("Newton Divided Difference:", interp.divided_difference(x))
 
-
 print("---------------------------------------------------")
 
 ##############################

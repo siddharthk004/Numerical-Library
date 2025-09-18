@@ -118,7 +118,7 @@ class Interpolation:
         return res
 
     def divided_difference(self, x):
-        n = len(self.x_points)
+        n = len(self.x_points) 
         diff = []
         for i in range(n):
             row = [0] * n

@@ -1,3 +1,5 @@
+
+
 class NumericalIntegration:
     def __init__(self, x_points, y_points):
         self.x_points = x_points
@@ -12,7 +14,7 @@ class NumericalIntegration:
         while i < n - 1:
             res = res + 2 * self.y_points[i]
             i = i + 1
-
+ 
         ans = (h / 2) * res
         return ans
 
