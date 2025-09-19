@@ -79,43 +79,48 @@ class Interpolation:
 
     def stirling(self, x):
         n = len(self.x_points)
+        if n % 2 == 0:
+            raise ValueError("Stirling interpolation needs an odd number of data points")
         h = self.x_points[1] - self.x_points[0]
 
-        diff = []
-        diff.append(self.y_points[:])
-        i = 1
-        while i < n:
+        # build forward differences
+        diff = [self.y_points[:]]
+        for i in range(1, n):
             row = []
-            j = 0
-            while j < n - i:
+            for j in range(n - i):
                 row.append(diff[i - 1][j + 1] - diff[i - 1][j])
-                j = j + 1
             diff.append(row)
-            i = i + 1
 
         mid = n // 2
         x0 = self.x_points[mid]
         u = (x - x0) / h
 
         res = self.y_points[mid]
-        if mid - 1 >= 0:
-            res = res + u * (diff[1][mid] + diff[1][mid - 1]) / 2
 
-        uterm = 1
+        # first order (average of two central differences)
+        if mid - 1 >= 0:
+            res += u * (diff[1][mid] + diff[1][mid - 1]) / 2
+
         fact = 1
         i = 2
-        while i < n:
-            if i % 2 == 0:
-                fact = fact * i
-                uterm = uterm * (u ** 2 - (i // 2 - 1) ** 2)
-                res = res + (uterm * diff[i][mid - i // 2]) / fact
-            else:
-                fact = fact * i
-                uterm = u * (u ** 2 - (i // 2) ** 2)
-                avg = (diff[i][mid - (i + 1)//2] + diff[i][mid - (i - 1)//2]) / 2
-                res = res + (uterm * avg) / fact
-            i = i + 1
+        u_term = 1
+        while i < n and (mid - i//2) >= 0 and (mid - i//2) < len(diff[i]):
+            if i % 2 == 0:  # even term
+                fact *= i
+                u_term *= (u**2 - (i//2 - 1)**2)
+                res += (u_term * diff[i][mid - i//2]) / fact
+            else:           # odd term
+                fact *= i
+                u_term = u * (u**2 - (i//2)**2)
+                idx1 = mid - (i+1)//2
+                idx2 = mid - (i-1)//2
+                if idx1 < 0 or idx2 >= len(diff[i]):  # out of range
+                    break
+                avg = (diff[i][idx1] + diff[i][idx2]) / 2
+                res += (u_term * avg) / fact
+            i += 1
         return res
+
 
     def divided_difference(self, x):
         n = len(self.x_points) 
