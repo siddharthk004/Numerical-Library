@@ -65,6 +65,7 @@ print("f(x) Forward:", d.forward_interpolate(x))
 
 print("\nBackward difference table:")
 
+
 for col in d.backward_difference_table():
     print(col)
 print("f(x) Backward:", d.backward_interpolate(x))
