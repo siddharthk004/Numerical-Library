@@ -46,7 +46,7 @@ class Difference:
 
         return diff
 
-    def central_difference_table(self):
+    def strling_central_difference_table(self):
         n = len(self.y_values)
         diff = [self.y_values[:]]
 

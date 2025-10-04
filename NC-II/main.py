@@ -64,8 +64,6 @@ for col in d.forward_difference_table():
 print("f(x) Forward:", d.forward_interpolate(x))
 
 print("\nBackward difference table:")
-
-
 for col in d.backward_difference_table():
     print(col)
 print("f(x) Backward:", d.backward_interpolate(x))
@@ -75,14 +73,15 @@ for col in d.divided_difference_table():
     print(col)
 print("f(x) Divided:", d.divided_interpolate(x))
 
+# odd points
 x_points = [0,1,2,3,4]
 y_points = [0,1,4,9,16]
 d = Difference(x_points, y_points)
-print("\nCentral difference table:")
-for col in d.central_difference_table():
+
+print("\n Strling Central difference table:")
+for col in d.strling_central_difference_table():
     print(col)
 print("f(x) Stirling:", d.stirling_interpolate(x))
 
 print("---------------------------------------------------")
 print("---------------------------------------------------")
-    
