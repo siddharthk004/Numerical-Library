@@ -1,7 +1,7 @@
 from interpolation import Interpolation
 
 class Difference:
-    def __init__(self, x, y):
+    def __init__(self, x, y):  
         self.x_values = x
         self.y_values = y
         self.interp = Interpolation(x, y)

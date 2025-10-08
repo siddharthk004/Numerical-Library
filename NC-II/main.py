@@ -7,6 +7,9 @@
 from interpolation import Interpolation
 from NumericalIntegration import NumericalIntegration
 from difference import Difference
+from differencial_equations import DifferentialEquations
+import math
+
 
 ########################
 #    Interpolation     #
@@ -82,6 +85,77 @@ print("\n Strling Central difference table:")
 for col in d.strling_central_difference_table():
     print(col)
 print("f(x) Stirling:", d.stirling_interpolate(x))
+
+print("---------------------------------------------------")
+print("---------------------------------------------------")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################
+# Differential Equation Methods #
+#################################
+
+def f(x, y):
+    return x + y
+
+def exact(x):
+    return 2 * math.exp(x) - x - 1
+
+de = DifferentialEquations(f, exact)
+
+x0 = 0
+y0 = 1
+xn = 1
+h = 0.2
+
+# print("\n------- Differential Equation Solutions -------")
+# de.display_table(x0, y0, h, xn)
 
 print("---------------------------------------------------")
 print("---------------------------------------------------")
