@@ -1,11 +1,16 @@
 import math
-from prettytable import PrettyTable  
+import matplotlib.pyplot as plt
 
 class DifferentialEquations:
     def __init__(self, func, exact=None):
+        """
+        func: dy/dx = f(x, y)
+        exact: exact solution function y(x) (optional)
+        """
         self.func = func
         self.exact = exact
 
+    # Euler method
     def euler(self, x0, y0, h, xn):
         xs, ys = [x0], [y0]
         while x0 < xn:
@@ -15,6 +20,7 @@ class DifferentialEquations:
             ys.append(y0)
         return xs, ys
 
+    # Modified Euler / RK2
     def modified_euler(self, x0, y0, h, xn):
         xs, ys = [x0], [y0]
         while x0 < xn:
@@ -26,6 +32,7 @@ class DifferentialEquations:
             ys.append(y0)
         return xs, ys
 
+    # RK4 method
     def rk4(self, x0, y0, h, xn):
         xs, ys = [x0], [y0]
         while x0 < xn:
@@ -39,20 +46,42 @@ class DifferentialEquations:
             ys.append(y0)
         return xs, ys
 
+    # Display table in pure python
     def display_table(self, x0, y0, h, xn):
         x_euler, y_euler = self.euler(x0, y0, h, xn)
-        x_mod, y_mod = self.modified_euler(x0, y0, h, xn)
-        x_rk4, y_rk4 = self.rk4(x0, y0, h, xn)
+        _, y_mod = self.modified_euler(x0, y0, h, xn)
+        _, y_rk4 = self.rk4(x0, y0, h, xn)
 
-        table = PrettyTable(["x", "Euler", "Mod Euler (RK2)", "RK4", "Exact Sol"])
+        print("\n{:<8} {:<12} {:<15} {:<12} {:<12}".format("x", "Euler", "Mod Euler(RK2)", "RK4", "Exact"))
+        print("-"*65)
 
         for i in range(len(x_euler)):
             exact_val = self.exact(x_euler[i]) if self.exact else "-"
-            table.add_row([
-                round(x_euler[i], 4),
-                round(y_euler[i], 6),
-                round(y_mod[i], 6),
-                round(y_rk4[i], 6),
-                round(exact_val, 6) if exact_val != "-" else "-"
-            ])
-        print(table)
+            print("{:<8.4f} {:<12.6f} {:<15.6f} {:<12.6f} {:<12}".format(
+                x_euler[i],
+                y_euler[i],
+                y_mod[i],
+                y_rk4[i],
+                round(exact_val,6) if exact_val != "-" else exact_val
+            ))
+
+    # Plot solutions
+    def plot_solutions(self, x0, y0, h, xn):
+        x_euler, y_euler = self.euler(x0, y0, h, xn)
+        _, y_mod = self.modified_euler(x0, y0, h, xn)
+        _, y_rk4 = self.rk4(x0, y0, h, xn)
+        x_exact = x_euler
+        y_exact = [self.exact(x) for x in x_exact] if self.exact else None
+
+        plt.figure(figsize=(10,6))
+        plt.plot(x_euler, y_euler, 'r--', label="Euler")
+        plt.plot(x_euler, y_mod, 'g-.', label="Modified Euler (RK2)")
+        plt.plot(x_euler, y_rk4, 'b-', label="RK4")
+        if y_exact:
+            plt.plot(x_exact, y_exact, 'k', label="Exact Solution")
+        plt.title("Numerical Solutions of ODE")
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.legend()
+        plt.grid(True)
+        plt.show()

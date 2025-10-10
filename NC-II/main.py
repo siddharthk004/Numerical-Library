@@ -8,6 +8,8 @@ from interpolation import Interpolation
 from NumericalIntegration import NumericalIntegration
 from difference import Difference
 from differencial_equations import DifferentialEquations
+from power_method import PowerMethod
+import numpy as np
 import math
 
 
@@ -89,54 +91,6 @@ print("f(x) Stirling:", d.stirling_interpolate(x))
 print("---------------------------------------------------")
 print("---------------------------------------------------")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #################################
 # Differential Equation Methods #
 #################################
@@ -154,8 +108,28 @@ y0 = 1
 xn = 1
 h = 0.2
 
-# print("\n------- Differential Equation Solutions -------")
-# de.display_table(x0, y0, h, xn)
+print("\n------- Differential Equation Solutions -------")
+de.display_table(x0, y0, h, xn)
+
+# Plot solutions
+de.plot_solutions(x0, y0, h, xn)
+print("---------------------------------------------------")
+print("---------------------------------------------------")
+
+#################################
+#         Power Methods         #
+#################################
+
+A = np.array([[4, 1, 1],
+              [2, 3, 1],
+              [1, 1, 2]])
+
+pm = PowerMethod(A, tol=1e-6, max_iter=100)
+eigenvalue, eigenvector, iterations = pm.compute()
+
+print("Dominant Eigenvalue:", eigenvalue)
+print("Corresponding Eigenvector:", eigenvector)
+print("Iterations taken:", iterations)
 
 print("---------------------------------------------------")
 print("---------------------------------------------------")

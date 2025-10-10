@@ -12,7 +12,7 @@ class Difference:
 
         for i in range(1, n):
             col = []
-            for j in range(n - i):
+            for j in range(n - i): 
                 col.append(diff[i - 1][j + 1] - diff[i - 1][j])
             diff.append(col)
 
