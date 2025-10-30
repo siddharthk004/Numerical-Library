@@ -106,7 +106,7 @@ de = DifferentialEquations(f, exact)
 x0 = 0
 y0 = 1
 xn = 1
-h = 0.2
+h = 0.1
 
 print("\n------- Differential Equation Solutions -------")
 de.display_table(x0, y0, h, xn)
@@ -115,6 +115,11 @@ de.display_table(x0, y0, h, xn)
 de.plot_solutions(x0, y0, h, xn)
 print("---------------------------------------------------")
 print("---------------------------------------------------")
+
+# find h and Error then print both line when h decreases then error behaves 
+
+# array that store h and error 
+# Error = Euler method - Exact Solution
 
 #################################
 #         Power Methods         #
