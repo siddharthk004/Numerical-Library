@@ -95,7 +95,7 @@ class DifferentialEquations:
             # Euler method computation
             x, y = x0, y0
             while x < xn:
-                y = y + h * self.func(x, y)   # ✅ fixed from self.f → self.func
+                y = y + h * self.func(x, y)   
                 x += h
 
             exact_val = self.exact(xn)
@@ -103,6 +103,7 @@ class DifferentialEquations:
             errors.append(error)
 
             print(f"h = {h:<6} | Euler y({xn}) = {y:.6f} | Exact = {exact_val:.6f} | Error = {error:.6f}")
+
 
         # ---- Plot Error vs h ----
         plt.figure(figsize=(8, 5))
