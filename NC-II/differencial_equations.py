@@ -95,7 +95,7 @@ class DifferentialEquations:
             # Euler method computation
             x, y = x0, y0
             while x < xn:
-                y = y + h * self.func(x, y)   # ✅ fixed from self.f → self.func
+                y = y + h * self.func(x, y)   
                 x += h
 
             exact_val = self.exact(xn)
