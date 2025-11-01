@@ -85,3 +85,31 @@ class DifferentialEquations:
         plt.legend()
         plt.grid(True)
         plt.show()
+        
+    def error_vs_h(self, x0, y0, xn):
+        """Analyze how the global error behaves with changing step size h."""
+        h_values = [0.5, 0.4, 0.3, 0.25, 0.2, 0.15, 0.1, 0.08, 0.05, 0.03, 0.02, 0.01]
+        errors = []
+
+        for h in h_values:
+            # Euler method computation
+            x, y = x0, y0
+            while x < xn:
+                y = y + h * self.func(x, y)   # ✅ fixed from self.f → self.func
+                x += h
+
+            exact_val = self.exact(xn)
+            error = abs(exact_val - y)
+            errors.append(error)
+
+            print(f"h = {h:<6} | Euler y({xn}) = {y:.6f} | Exact = {exact_val:.6f} | Error = {error:.6f}")
+
+        # ---- Plot Error vs h ----
+        plt.figure(figsize=(8, 5))
+        plt.plot(h_values, errors, 'o-b', linewidth=2, markersize=6)
+        plt.xlabel("Step Size (h)")
+        plt.ylabel("Global Error |Exact - Euler|")
+        plt.title("Error Behavior of Euler Method vs Step Size (h)")
+        plt.grid(True)
+        plt.gca().invert_xaxis()  # smaller h on right side (error decreases visually)
+        plt.show()

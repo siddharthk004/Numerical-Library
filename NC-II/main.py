@@ -120,6 +120,10 @@ print("---------------------------------------------------")
 
 # array that store h and error 
 # Error = Euler method - Exact Solution
+print("\n------- Error vs Step Size (Euler Method) -------")
+de.error_vs_h(x0, y0, xn)
+print("---------------------------------------------------")
+print("---------------------------------------------------")
 
 #################################
 #         Power Methods         #
