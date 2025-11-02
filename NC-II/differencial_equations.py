@@ -112,5 +112,5 @@ class DifferentialEquations:
         plt.ylabel("Global Error |Exact - Euler|")
         plt.title("Error Behavior of Euler Method vs Step Size (h)")
         plt.grid(True)
-        plt.gca().invert_xaxis()  # smaller h on right side (error decreases visually)
+        plt.gca().invert_xaxis()  
         plt.show()
