@@ -1,143 +1,85 @@
-
 ########################################
 # Name :- Siddharth Satish Kardile     #
-# Numerical-II Library in PY           #
+# NDVI Central Difference Analysis     #
 ########################################
 
-from interpolation import Interpolation
-from NumericalIntegration import NumericalIntegration
-from difference import Difference
-from differencial_equations import DifferentialEquations
-from power_method import PowerMethod
+from pystac_client import Client
+import planetary_computer
+import geopandas as gpd
+import rasterio
 import numpy as np
-import math
+from datetime import datetime
+import pandas as pd
+import matplotlib.pyplot as plt
+from shapely.geometry import box
 
+# --- Step 1: Define region (example: around Pune, India) ---
+# bounding box: minx, miny, maxx, maxy (lon/lat)
+bbox = box(73.7, 18.3, 74.0, 18.7)  # approx. Pune region
+aoi = gpd.GeoDataFrame([1], geometry=[bbox], crs="EPSG:4326")
 
-########################
-#    Interpolation     #
-########################
-print("---------------------------------------------------")
-print("---------------------------------------------------")
+# --- Step 2: Connect to MODIS NDVI collection ---
+catalog = Client.open("https://planetarycomputer.microsoft.com/api/stac/v1")
+collection = "modis-13Q1-061"  # MOD13Q1 v6.1
+search = catalog.search(
+    collections=[collection],
+    intersects=aoi.geometry[0],
+    datetime="2024-01-01/2024-12-31",
+)
+items = list(search.get_items())
+print(f"Found {len(items)} scenes")
+# After: items = list(search.get_items())
+# print(f"Found {len(items)} scenes")
 
-x_pts = [-2,0,2]
-y_pts = [4,2,3]
+# # Add this debug block:
+# if len(items) > 0:
+#     print("Available asset keys in the first item:")
+#     print(list(items[0].assets.keys()))
+#     print("Collection ID:", items[0].collection_id)
+#     exit()
 
-interp = Interpolation(x_pts, y_pts)
+# --- Step 3: Read NDVI values for each date ---
+records = []
+for item in items:
+    signed_asset = planetary_computer.sign(item.assets["250m_16_days_NDVI"])
 
-x = float(input("Enter X: "))
+    with rasterio.open(signed_asset.href) as src:
+        ndvi = src.read(1).astype("float32")
+        ndvi[ndvi == src.nodata] = np.nan
+        ndvi *= 0.0001  # scale factor
+        mean_ndvi = np.nanmean(ndvi)
 
-print("---------------------------------------------------")
+        # ---- FIXED DATE HANDLING ----
+        # Some items lack item.datetime, so fall back to start_datetime
+        if item.datetime:
+            date = item.datetime.date()
+        else:
+            # parse from properties if needed
+            date_str = item.properties.get("start_datetime") or item.properties.get("end_datetime")
+            date = datetime.fromisoformat(date_str).date()
 
-print("Lagrange interpolation:", interp.lagrange(x))
-print("Forward interpolation:", interp.forward(x))
-print("Backward interpolation:", interp.backward(x))
-print("Stirling interpolation:", interp.stirling(x))
-print("Newton Divided Difference:", interp.divided_difference(x))
+        records.append({"Date": date, "NDVI": mean_ndvi})
 
-print("---------------------------------------------------")
-print("---------------------------------------------------")
+# --- Step 4: Build DataFrame ---
+df = pd.DataFrame(records).sort_values("Date")
+df["Days"] = (df["Date"] - df["Date"].min()).dt.days
+print(df.head())
 
-##############################
-#   Numerical Integration    #
-##############################
+# --- Step 5: Interpolate missing values ---
+df["NDVI"] = df["NDVI"].interpolate()
 
-x_points = [0,1,2,3]
-y_points = [0,1,4,9]
+# --- Step 6: Compute Central Difference ---
+df["dNDVI_dt"] = np.gradient(df["NDVI"], df["Days"])
 
-ni = NumericalIntegration(x_points, y_points)
+# --- Step 7: Plot ---
+plt.figure(figsize=(8,5))
+plt.plot(df["Date"], df["NDVI"], "o-", label="NDVI")
+plt.plot(df["Date"], df["dNDVI_dt"], "s--", label="dNDVI/dt (Central Difference)")
+plt.xlabel("Date"); plt.ylabel("NDVI / Rate")
+plt.title("NDVI Trend and Rate of Change - Pune Region (MOD13Q1)")
+plt.legend(); plt.grid(True)
+plt.show()
 
-print("Trapezoidal:", ni.trapezoidal())
-print("Simpson 1/3:", ni.simpson_one_third())
-print("Simpson 3/8:", ni.simpson_three_eighth())
-
-print("---------------------------------------------------")
-print("---------------------------------------------------")
-
-##############################
-#     Difference Formula     #
-##############################
-
-x_points = [0,1,2,3]
-y_points = [0,1,4,9]
-
-d = Difference(x_points, y_points)
-x = float(input("Enter value of x: "))
-
-print("\nForward difference table:")
-for col in d.forward_difference_table():
-    print(col)
-print("f(x) Forward:", d.forward_interpolate(x))
-
-print("\nBackward difference table:")
-for col in d.backward_difference_table():
-    print(col)
-print("f(x) Backward:", d.backward_interpolate(x))
-
-print("\nDivided difference table:")
-for col in d.divided_difference_table():
-    print(col)
-print("f(x) Divided:", d.divided_interpolate(x))
-
-# odd points
-x_points = [0,1,2,3,4]
-y_points = [0,1,4,9,16]
-d = Difference(x_points, y_points)
-
-print("\n Strling Central difference table:")
-for col in d.strling_central_difference_table():
-    print(col)
-print("f(x) Stirling:", d.stirling_interpolate(x))
-
-print("---------------------------------------------------")
-print("---------------------------------------------------")
-
-#################################
-# Differential Equation Methods #
-#################################
-
-def f(x, y):
-    return x + y
-
-def exact(x):
-    return 2 * math.exp(x) - x - 1
-
-de = DifferentialEquations(f, exact)
-
-x0 = 0
-y0 = 1
-xn = 1
-h = 0.1
-
-print("\n------- Differential Equation Solutions -------")
-de.display_table(x0, y0, h, xn)
-
-# Plot solutions
-de.plot_solutions(x0, y0, h, xn)
-print("---------------------------------------------------")
-print("---------------------------------------------------")
-
-# find h and Error then print both line when h decreases then error behaves 
-
-# Error = Euler method - Exact Solution
-print("\n------- Error vs Step Size (Euler Method) -------")
-de.error_vs_h(x0, y0, xn)
-print("---------------------------------------------------")
-print("---------------------------------------------------")
-
-#################################
-#         Power Methods         #
-#################################
-
-A = np.array([[4, 1, 1],
-              [2, 3, 1],
-              [1, 1, 2]])
-
-pm = PowerMethod(A, tol=1e-6, max_iter=100)
-eigenvalue, eigenvector, iterations = pm.compute()
-
-print("Dominant Eigenvalue:", eigenvalue)
-print("Corresponding Eigenvector:", eigenvector)
-print("Iterations taken:", iterations)
-
-print("---------------------------------------------------")
-print("---------------------------------------------------")
+# --- Step 8: Save results ---
+df.to_csv("VegetationData/NDVI_Pune_2024.csv", index=False)
+print("Saved: VegetationData/NDVI_Pune_2024.csv")
