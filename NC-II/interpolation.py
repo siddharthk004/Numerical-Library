@@ -149,3 +149,5 @@ class Interpolation:
             res = res + diff[0][j] * term
             j = j + 1
         return res
+
+
