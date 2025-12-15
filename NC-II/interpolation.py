@@ -121,7 +121,6 @@ class Interpolation:
             i += 1
         return res
 
-
     def divided_difference(self, x):
         n = len(self.x_points) 
         diff = []
@@ -149,5 +148,3 @@ class Interpolation:
             res = res + diff[0][j] * term
             j = j + 1
         return res
-
-
